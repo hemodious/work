@@ -110,7 +110,7 @@ def staff1():
     issues=('transaction issue','account management issue','security issue')
     cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?)',issues)
     users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[7])
+            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[9])
             for row in cursor.fetchall()
         ]
     return users
@@ -122,7 +122,7 @@ def staff2():
     issues=('crash issue','perfomance management issue','others')
     cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?)',issues)
     users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[7])
+            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[9])
             for row in cursor.fetchall()
         ]
     return users

@@ -26,7 +26,7 @@ def user():
     if request.method == 'GET':
         cursor= conn.execute("SELECT * FROM user")
         users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[7])
+            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[9])
             for row in cursor.fetchall()
         ]
 

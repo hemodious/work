@@ -83,7 +83,7 @@ def user():
 
         #body of message to user
 
-        body=f"Dear {new_name} ,your complaint in \033category {new_category} has been recieved your complaint ID is \033{new_complaint_id} ,our staff will contact you soon\n \nThank you "
+        body=f"Dear {new_name} ,\n\nyour complaint in \033category {new_category.upper()} has been recieved your complaint ID is \033{new_complaint_id} ,our staff will contact you soon\n \nThank you "
         msg.attach(MIMEText(body,'plain'))
         server.sendmail("moorleinternship@gmail.com",new_email,msg.as_string())
         server.quit()#closing the server
@@ -106,8 +106,8 @@ def user():
         msg2['From']="moorleinternship@gmail.com"
         msg2['To']="michaelopoku790@gmail.com"
         msg2['Subject']="NEW REPORT"
-        body1=f"Dear Emmanuel ,{new_name},with id \033{new_complaint_id} has  submitted a complaint in \033 category {new_category.upper()},please contact him/her soon\n thank you "
-        body2=f"Dear Michael ,{new_name}, with id \033{new_complaint_id} has  submitted a complaint in \033category {new_category.upper()} ,please contact him/her soon\n thank you "
+        body1=f"Dear Emmanuel ,\n\n{new_name},with id \033{new_complaint_id} has  submitted a complaint in \033 category {new_category.upper()} ,please contact him/her soon\n\n thank you "
+        body2=f"Dear Michael ,\n\n{new_name}, with id \033{new_complaint_id} has  submitted a complaint in \033category {new_category.upper()} ,please contact him/her soon\n\n thank you "
         #a list issues staff one should handle
         checker=["transaction issue","account management issue","security issues"]
         #checking if the complaint is in the list of issues staff1  should handle

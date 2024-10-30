@@ -44,8 +44,14 @@ def user():
         new_complaint=request.form['complaint']
         new_email=request.form['email']
         new_category=request.form['category']
-        new_image=request.files['image']
-        image_data = new_image.read() 
+        #file handling
+        new_image=request.files.get('image')
+        #checks if the image is empty or not 
+        if  new_image:
+            image_data=new_image.read()#gets the image if added
+        else:
+            image_data=None    
+        
         characters=string.ascii_letters+ string.digits*4
 
         ans=''.join(random.choices(characters, k=7) )
@@ -65,6 +71,7 @@ def user():
 
         cursor=cursor.execute(sql,(new_name,new_telephone,new_complaint,new_email,new_category,image_data,new_complaint_id))
         conn.commit()
+        conn.close()
         #code to send  email to clients
         server=smtplib.SMTP('smtp.gmail.com',587)
         server.starttls()
@@ -99,8 +106,8 @@ def user():
         msg2['From']="moorleinternship@gmail.com"
         msg2['To']="michaelopoku790@gmail.com"
         msg2['Subject']="NEW REPORT"
-        body1=f"Dear Emmanuel ,{new_name},with id \033{new_complaint_id} has  submitted a complaint in \033 category {new_category},please contact him/her soon\n thank you "
-        body2=f"Dear Michael ,{new_name}, with id \033{new_complaint_id} has  submitted a complaint in \033category {new_category} ,please contact him/her soon\n thank you "
+        body1=f"Dear Emmanuel ,{new_name},with id \033{new_complaint_id} has  submitted a complaint in \033 category {new_category.upper()},please contact him/her soon\n thank you "
+        body2=f"Dear Michael ,{new_name}, with id \033{new_complaint_id} has  submitted a complaint in \033category {new_category.upper()} ,please contact him/her soon\n thank you "
         #a list issues staff one should handle
         checker=["transaction issue","account management issue","security issues"]
         #checking if the complaint is in the list of issues staff1  should handle
@@ -131,8 +138,9 @@ def staff1():
             dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[9])
             for row in cursor.fetchall()
         ]
+    conn.close()
     return users
-
+    
 @app.route('/staff2',methods=['GET'])
 def staff2():
     conn=db_connection()

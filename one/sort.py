@@ -11,3 +11,6 @@ for good in store:
         store.append(ans)  
         print(ans)   
 print(ans)
+dof="car"
+car=f"car {dof.upper()}"
+print(car)

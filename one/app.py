@@ -160,7 +160,7 @@ def staff2():
 
 
 
-@app.route('/login',methods=['POST'])
+@app.route('/login',methods=['GET'])
 #authenticate staff upon login
 def  login():
     user_email=request.form['email']

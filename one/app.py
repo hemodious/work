@@ -183,7 +183,7 @@ def  chatroom_login():
         
 @app.route('/chatlogin',methods=['GET'])#sends the staff to the chatroom
 def Login():
-    return render_template('login.html')
+    return render_template('chatlogin.html')
 @app.route('/chatroom',methods=['GET'])#sends the staff to the chatroom
 def chatroom():
     return render_template('chatroom.html')

@@ -160,7 +160,7 @@ def staff2():
 
 
 
-@app.route('/login',methods=['GET'])
+@app.route('/login',methods=['POST'])
 #authenticate staff upon login
 def  login():
     user_email=request.form['email']
@@ -181,7 +181,7 @@ def  chatroom_login():
     if Password=="password":
         return chatroom()
         
-@app.route('/login',methods=['GET'])#sends the staff to the chatroom
+@app.route('/chatlogin',methods=['GET'])#sends the staff to the chatroom
 def Login():
     return render_template('login.html')
 @app.route('/chatroom',methods=['GET'])#sends the staff to the chatroom

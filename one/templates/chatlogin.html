@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="form" method="POST"  action="/chatroom">
+
+        <input  type="text" id="name" placeholder="Enter your name">
+
+      
+        <button type="submit"><a href="chatroom.html"></a>login</button>
+    </form>
+
+    <script>
+        document.getElementById("form").addEventListener("submit", function(e) {e.preventDefault();
+            const username=document.getElementById('name').value;
+            localStorage.setItem('username',username);
+            window.location.href = 'https://customer-complaint.onrender.com/chatroom'
+        })
+    </script>
+</body>
+</html>

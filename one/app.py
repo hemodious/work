@@ -144,7 +144,7 @@ def staff1():
             for row in cursor.fetchall()
         ]
     conn.close()
-    return users
+    return jsonify(users)
     
 @app.route('/staff2',methods=['GET'])
 def staff2():
@@ -156,7 +156,7 @@ def staff2():
             dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[9])
             for row in cursor.fetchall()
         ]
-    return users
+    return jsonify(users)
 
 
 

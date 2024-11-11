@@ -1,4 +1,8 @@
 from flask import Flask ,request,jsonify,render_template
+from flask_socketio import  SocketIO, send
+from flask_cors import  CORS
+
+
 import json
 import sqlite3
 import smtplib
@@ -8,7 +12,8 @@ import random
 import string
 
 app = Flask(__name__)
-
+CORS(app)
+socketio= SocketIO(app)
 #databasee connection
 def db_connection():
     conn =None
@@ -83,7 +88,7 @@ def user():
 
         #body of message to user
 
-        body=f"Dear {new_name} ,\n\nyour complaint in \033category {new_category.upper()} has been recieved your complaint ID is \033{new_complaint_id} ,our staff will contact you soon\n \nThank you "
+        body=f"Dear {new_name} ,\n\nyour complaint in category {new_category.upper()} has been recieved your complaint ID is {new_complaint_id} ,our staff will contact you soon\n \nThank you "
         msg.attach(MIMEText(body,'plain'))
         server.sendmail("moorleinternship@gmail.com",new_email,msg.as_string())
         server.quit()#closing the server
@@ -106,7 +111,7 @@ def user():
         msg2['From']="moorleinternship@gmail.com"
         msg2['To']="michaelopoku790@gmail.com"
         msg2['Subject']="NEW REPORT"
-        body1=f"Dear Emmanuel ,\n\n{new_name},with id \033{new_complaint_id} has  submitted a complaint in \033 category {new_category.upper()} ,please contact him/her soon\n\n thank you "
+        body1=f"Dear Emmanuel ,\n\n{new_name},with id \033{new_complaint_id} has  submitted a complaint in \033 category  {new_category.upper()}  ,please contact him/her soon\n\n thank you "
         body2=f"Dear Michael ,\n\n{new_name}, with id \033{new_complaint_id} has  submitted a complaint in \033category {new_category.upper()} ,please contact him/her soon\n\n thank you "
         #a list issues staff one should handle
         checker=["transaction issue","account management issue","security issues"]
@@ -171,9 +176,24 @@ def  login():
     else : 
         return "invalid credentials"
 
+def  chatroom_login():
+    Password=request.form['password']
+    if Password=="password":
+        return chatroom()
+        
+@app.route('/login',methods=['GET'])#sends the staff to the chatroom
+def Login():
+    return render_template('login.html')
+@app.route('/chatroom',methods=['GET'])#sends the staff to the chatroom
+def chatroom():
+    return render_template('chatroom.html')
 
-
-
+#message handler
+@socketio.on('message')
+def handlemessages(msg):
+    print('Message: '+ str(msg))
+    send(msg,broadcast=True)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    #
+    socketio.run(app,debug=True)

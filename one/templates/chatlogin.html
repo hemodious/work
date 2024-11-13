@@ -6,20 +6,51 @@
     <title>Document</title>
 </head>
 <body>
-    <form id="form" method="POST"  action="/chatroom">
+    
+<style>
+    .form{
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+    .name{
+        border-radius: 20px;
+        width: 300px;
+        height: 40px;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+    .button{
+        background-color: #4CAF50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+    .button a{
+        text-decoration: none;
+        color: #fff;
+    }
+</style>
+<form id="form" method="POST"  action="/chatroom">
+    <input  type="text" id="name" placeholder="Enter your name to login" required class="name">
+    <button type="submit" class="button"><a href="chatroom.html">Login</a></button>
+</form>
 
-        <input  type="text" id="name" placeholder="Enter your name">
-
-      
-        <button type="submit"><a href="chatroom.html"></a>login</button>
-    </form>
-
-    <script>
-        document.getElementById("form").addEventListener("submit", function(e) {e.preventDefault();
-            const username=document.getElementById('name').value;
-            localStorage.setItem('username',username);
+<script>
+    document.getElementById("form").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const username = document.getElementById('name').value.trim();
+        if (username) {
+            localStorage.setItem('username', username);
             window.location.href = 'https://customer-complaint.onrender.com/chatroom'
-        })
-    </script>
+        } else {
+            alert("Please enter your name");
+        }
+    })
+</script>
+   
 </body>
 </html>

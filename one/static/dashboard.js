@@ -1,6 +1,6 @@
 // Function to fetch data from the API and populate the table
 async function populateTable() {
-    const apiUrl = 'https://customer-complaint.onrender.com/user';  // Replace with your actual API URL
+    const apiUrl = 'https://customer-complaint.onrender.com/staff1';  // Replace with your actual API URL
     
     try {
         // Fetch the data from the API

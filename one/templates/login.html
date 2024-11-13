@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff login</title>
-    <link rel="stylesheet" href="login.css">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <form action="#">
+        <form  id="login-form">
             <div class="logo">
-                <img src="images/logo.jpeg" alt="logo" style="width: 100px; height: 100px; padding-left: 140px;">
+                <img src="images_login/logo.jpeg" alt="logo" style="width: 100px; height: 100px; padding-left: 140px;">
             </div>
             <div class="heading">
                 <h3>Sign in with email</h3>
@@ -37,27 +37,7 @@
             </div>
         </form>
     </div>
-    <script>
-        function validateForm(){
-            const emailInput = document.getElementById('email').value;
-            const  passwordInput = document.getElementById('password').value;
-            if(emailInput === '' || passwordInput === ''){
-                alert('Please fill in all the fields')
-                return false;
-            }
-            else if(emailInput === 'michaelopoku790@gmail.com' && passwordInput === '@MichaelP@$$'){
-                window.location.href ='dashboard2.html';
-                return true;
-            }
-            else if(emailInput === 'affoh.emmanuel.ea@gmail.com' && passwordInput === '@EmmanuelP@$$'){
-                window.location.href ='dashboard1.html';
-                return true;
-            }
-            else{
-                alert('Invalid email password')
-                return false;
-            }
-        }
-    </script>
+    
+    <script src="login.js"></script>
 </body>
 </html>

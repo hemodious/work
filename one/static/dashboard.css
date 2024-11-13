@@ -19,7 +19,7 @@ body{
     display: flex;
     justify-content: left;
     margin: 20px 20px;
-    background:url(images/background2.jpeg)center/cover;
+    background-image:url('static/imagesdashboard/background2.jpeg') ;
 }
 .sidebar{
     height: 100%;

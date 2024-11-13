@@ -109,31 +109,35 @@ ul li{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
 
     <script>
-        const socket = io();
-       
-       const form = document.getElementById('form');
-        const input = document.getElementById('input');
-        const messages = document.getElementById('messages');
-        const username = localStorage.getItem('username'); 
+      const socket = io();
 
-        form.addEventListener('submit',(e) =>{
-            e.preventDefault();
-            if (input.value && username){
-                const msg={
-                    user: username,
-                    text: input.value
 
-                };
-                socket.send(msg);
-                input.value = '';
-            }
-        });
-        socket.on('message',function(msg) {
-            console.log('Connected to the server');
-            const li= document.createElement('li')
-            li.textContent = `${msg.user}:${msg.text}`;
-            messages.appendChild(li);
-            });
-    </script>
+      const form = document.getElementById('form');
+const input = document.getElementById('input');
+const messages = document.getElementById('messages');
+const username = localStorage.getItem('username');
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (input.value.trim() && username) {
+    const msg = {
+      user: username,
+      text: input.value.trim()
+    };
+    socket.send(msg);
+    input.value = '';
+  }
+});
+socket.on('message', (msg) => {
+  const li = document.createElement('li');
+  li.textContent = `${msg.user}: ${msg.text}`;
+  messages.appendChild(li);
+  messages.scrollTop = messages.scrollHeight;
+});
+
+socket.on('connect', () => {
+  console.log('Connected to the server');
+});
+</script>
 </body>
 </html>

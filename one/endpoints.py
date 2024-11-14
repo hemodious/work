@@ -179,6 +179,7 @@ def  chatroom_login():
 @api.route('/chatlogin',methods=['GET'])#sends the staff to the chatroomlogin page
 def Login():
     return render_template('chatlogin.html')
+
 @api.route('/chatroom',methods=['GET'])#sends the staff to the chatroom
 def chatroom():
     return render_template('chatroom.html')

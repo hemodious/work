@@ -1,16 +1,10 @@
-import random
-import string
-characters=string.ascii_letters+ string.digits*4
+import sqlite3
+from datetime import datetime
 
-ans=''.join(random.choices(characters, k=7) )
-store=[] 
-for good in store:
-    if store == ans :
-        print("already exists")
-    else:
-        store.append(ans)  
-        print(ans)   
-print(ans)
-dof="car"
-car=f"car {dof.upper()}"
-print(car)
+# Connect to the database (or create it)
+conn = sqlite3.connect('chat.db')
+c = conn.cursor()
+
+# Create a table for chat messages
+c.execute('''CREATE TABLE IF NOT EXISTS messages
+             (id INTEGER PRIMARY KEY, user_id TEXT, message TEXT, timestamp TEXT)''')

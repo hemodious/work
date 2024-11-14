@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff login</title>
-    
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <form  id="login-form">
             <div class="logo">
-                <img src="images_login/logo.jpeg" alt="logo" style="width: 100px; height: 100px; padding-left: 140px;">
+                <img src="{{ url_for('static', filename='images_login/logo.jpeg') }}" alt="logo" style="width: 100px; height: 100px; padding-left: 140px;">
             </div>
             <div class="heading">
                 <h3>Sign in with email</h3>
@@ -32,12 +32,12 @@
                 <a href="">forgot password?</a>
             </div>
             <div class="login-button">
-                <button type="submit" onclick="validateForm()"><a href="/staff /Dashboard/dashboard.html">Login</a></button>
+                <button type="submit" ><a>Login</a></button>
 
             </div>
         </form>
     </div>
     
-    <script src="login.js"></script>
+    <script src="{{ url_for('static', filename='login.js') }}"></script>
 </body>
 </html>

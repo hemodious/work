@@ -149,18 +149,27 @@ def  login():
     user_email=request.form['email']
     user_password=request.form['password']
     if user_email== "affoh.emmanuel.ea@gmail.com" and user_password=="password":
-        return render_template('dashboard1.html')
+       return jsonify({
+            "message": "Login successful",
+            "redirectUrl": "/dashboard1"  # URL to redirect to
+        }), 200
     elif user_email== "affoh.emmanuel.ea@gmail.com" and user_password!="password":
         return "invalid password"
     elif user_email == "michaelopoku790@gmail.com" and user_password=="password":
-         return render_template('dashboard2.html')
+          return jsonify({
+            "message": "Login successful",
+            "redirectUrl": "/dashboard2"  # URL to redirect to
+        }), 200
     elif user_email  == "michaelopoku790@gmail.com" and user_password!="password":
         return "invalid password"
     else : 
         return "invalid credentials"
 
-@api.route('/dashboard',methods=['GET'])
-def dashboard():
+@api.route('/dashboard1',methods=['GET'])
+def dashboard1():
+    return render_template('dashboard1.html')
+@api.route('/dashboard2',methods=['GET'])
+def dashboard2():
     return render_template('dashboard2.html')
 def  chatroom_login():
     Password=request.form['password']
@@ -173,3 +182,6 @@ def Login():
 @api.route('/chatroom',methods=['GET'])#sends the staff to the chatroom
 def chatroom():
     return render_template('chatroom.html')
+@api.route('/staff_login',methods=['GET'])
+def staff_login() :
+    return render_template('login.html')

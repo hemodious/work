@@ -33,7 +33,7 @@ async function populateTable() {
             emailCell.textContent = item.email; // Assuming the data has an 'email' property
 
             const phoneCell = document.createElement('td');
-            phoneCell.textContent = item.phone; // Assuming the data has a 'phone' property
+            phoneCell.textContent = item.telephone; // Assuming the data has a 'phone' property
             
             const categoryCell = document.createElement('td');
             categoryCell.textContent = item.category; // Assuming the data has a 'category' property

@@ -151,19 +151,25 @@ def  login():
     if user_email== "affoh.emmanuel.ea@gmail.com" and user_password=="password":
        return jsonify({
             "message": "Login successful",
-            "redirectUrl": "/dashboard1"  # URL to redirect to
+            "redirectUrl": "https://customer-complaint.onrender.com/dashboard1"  # URL to redirect to
         }), 200
     elif user_email== "affoh.emmanuel.ea@gmail.com" and user_password!="password":
-        return "invalid password"
+        return jsonify({
+            "message": "invalid password",
+                }), 200
     elif user_email == "michaelopoku790@gmail.com" and user_password=="password":
           return jsonify({
             "message": "Login successful",
-            "redirectUrl": "/dashboard2"  # URL to redirect to
+            "redirectUrl": "https://customer-complaint.onrender.com/dashboard2"  # URL to redirect to
         }), 200
     elif user_email  == "michaelopoku790@gmail.com" and user_password!="password":
-        return "invalid password"
+        return jsonify({
+            "message": "invalid password",
+                }), 200
     else : 
-        return "invalid credentials"
+        return jsonify({
+            "message": "invalid password",
+                }), 200
 
 @api.route('/dashboard1',methods=['GET'])
 def dashboard1():

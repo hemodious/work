@@ -45,6 +45,7 @@
             overflow: auto;
             resize: none;
             max-height: 70px;
+            
         }
 
         #input:focus {
@@ -81,6 +82,8 @@
         #chat {
             width: 400px;
             padding: 20px 20px;
+            overflow-y: scroll;
+            height: 500px;
         }
 
         #inputmessage_box {
@@ -129,7 +132,7 @@
             const li = document.createElement('li');
             li.textContent = `${msg.user}: ${msg.text}`;
             messages.appendChild(li);
-            messages.scrollTop = messages.scrollHeight;
+          
         });
 
         socket.on('connect', () => {

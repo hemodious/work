@@ -109,11 +109,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
 
     <script>
-       const socket = io('https://customer-complaint.onrender.com', {
-    transports: ['websocket'], // Force WebSocket transport
-    reconnectionAttempts: 5, // Number of reconnection attempts
-    timeout: 10000 // Connection timeout
-});
+       const socket = io();
 const form = document.getElementById('form');
 const input = document.getElementById('input');
 const messages = document.getElementById('messages');

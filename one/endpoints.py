@@ -4,6 +4,7 @@ from my_module import db_connection
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import  MIMEText
+from  my_module import chat_connection
 import random
 import string
 api = Blueprint('api', __name__)
@@ -189,6 +190,14 @@ def Login():
 @api.route('/chatroom',methods=['GET'])#sends the staff to the chatroom
 def chatroom():
     return render_template('chatroom.html')
-@api.route('/staff_login',methods=['GET'])
+
+@api.route('/chatroom_messages',methods=['GET'])
+def get_messages():
+    conn = chat_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT username, message FROM chat_messages')
+    messages = cursor.fetchall()
+    message_list= [{'username': msg[0], 'message': msg[1]} for msg in messages]
+    return jsonify(message_list), 200
 def staff_login() :
     return render_template('login.html')

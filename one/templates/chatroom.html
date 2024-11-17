@@ -109,35 +109,75 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
 
     <script>
-        const socket = io();
+       const socket = io();
+const form = document.getElementById('form');
+const input = document.getElementById('input');
+const messages = document.getElementById('messages');
+const user = localStorage.getItem('username');
 
-        const form = document.getElementById('form');
-        const input = document.getElementById('input');
-        const messages = document.getElementById('messages');
-        const username = localStorage.getItem('username');
+// Add message to the list
+function addMessageToList(message) {
+    const li = document.createElement('li');
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (input.value.trim() && username) {
-                const msg = {
-                    user: username,
-                    text: input.value.trim()
-                };
-                socket.send(msg);
-                input.value = '';
-            }
+    // Check if message is an object and format it accordingly
+    if (typeof message === 'object' && message.username && message.message) {
+        li.textContent = `${message.username}: ${message.message}`;
+    } else {
+        console.error('Invalid message format:', message); // Log the invalid message
+        li.textContent = 'Invalid message format'; // Fallback for unexpected message formats
+    }
+
+    messages.appendChild(li);
+}
+
+// Fetch initial messages
+async function fetchMessages() {
+    try {
+        const response = await fetch('/chatroom_messages');
+
+        // Check if the response is OK (status in the range 200-299)
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+
+        // Parse the JSON response
+        const messagesData = await response.json();
+
+        // Add each message to the list
+        messagesData.forEach(message => {
+           
+
+            // Call the function to add the message to the list
+            addMessageToList(message);
         });
+    } catch (error) {
+        console.error('Error fetching messages:', error);
+    }
+}
 
-        socket.on('message', (msg) => {
-            const li = document.createElement('li');
-            li.textContent = `${msg.user}: ${msg.text}`;
-            messages.appendChild(li);
-          
-        });
+// Fetch messages when the page loads
+fetchMessages();
 
-        socket.on('connect', () => {
-            console.log('Connected to the server');
-        });
+// Optional: Send message on form submission
+form.addEventListener('submit', (event) => {
+    event.preventDefault(); // Prevent the form from submitting in the traditional way
+    if (input.value) {
+        const message = {
+            username: user,
+            text: input.value
+        };
+
+        // Emit the message to the server
+        socket.emit('chat message', message);
+        input.value = ''; // Clear the input field
+    }
+});
+
+// Listen for incoming messages from the server
+socket.on('chat message', (message) => {
+    addMessageToList(message);
+});
+     
     </script>
 </body>
 </html>

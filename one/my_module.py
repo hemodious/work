@@ -6,3 +6,11 @@ def db_connection():
     except sqlite3.error as e:
         print(e)
     return conn
+
+def chat_connection():
+    conn =None
+    try:
+        conn = sqlite3.connect('chat.db')
+    except sqlite3.error as e:
+        print(e)
+    return conn

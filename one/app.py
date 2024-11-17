@@ -1,7 +1,7 @@
 
 from flask_socketio import  SocketIO, send
 from flask_cors import  CORS
-
+from my_module import chat_connection
 from flask import Flask 
 from endpoints import api
 app = Flask(__name__)
@@ -11,9 +11,17 @@ socketio= SocketIO(app)
 
 #message handler
 @socketio.on('message')
-def handlemessages(msg):
-    print('Message: '+ str(msg))
-    send(msg,broadcast=True)
+def handlemessages(data):
+    username= data['username']
+    message= data['message']
+
+    conn= chat_connection()
+    cursor= conn.cursor()
+    cursor.execute("INSERT INTO chat_messages (username, message) VALUES (?, ?)", (username, message))
+    conn.commit()
+
+    socketio.send({'username' : username, 'message' : message})
+    
 
 if __name__ == '__main__':
     #

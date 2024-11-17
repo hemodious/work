@@ -6,10 +6,14 @@ from flask import Flask
 from endpoints import api
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins='*')  
-CORS(app)
+CORS(app, resources={r"/socket.io/*": {"origins": "https://customer-complaint.onrender.com"}})  # Allow your client origin
+
 app.register_blueprint(api)
 socketio= SocketIO(app)
 
+@socketio.on('connect')
+def handle_connect():
+ send('Client connected', broadcast=True)
 #message handler
 @socketio.on('message')
 def handlemessages(data):

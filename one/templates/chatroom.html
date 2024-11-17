@@ -112,6 +112,9 @@
        const socket = io('https://customer-complaint.onrender.com', {
     transports: ['polling', 'websocket']
 });
+socket.on('connect', () => {
+            console.log('Connected to server');
+        });
 const form = document.getElementById('form');
 const input = document.getElementById('input');
 const messages = document.getElementById('messages');

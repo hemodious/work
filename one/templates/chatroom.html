@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <title>Document</title>
 </head>
-<link rel="stylesheet" href="styless.css">
+
 <body>
     <style>
         * {
@@ -145,7 +145,7 @@ async function fetchMessages() {
 
         // Add each message to the list
         messagesData.forEach(message => {
-           
+            // Log the message for debugging
 
             // Call the function to add the message to the list
             addMessageToList(message);
@@ -164,19 +164,20 @@ form.addEventListener('submit', (event) => {
     if (input.value) {
         const message = {
             username: user,
-            text: input.value
+            message: input.value
         };
-
-        // Emit the message to the server
-        socket.emit('chat message', message);
-        input.value = ''; // Clear the input field
-    }
-});
-
-// Listen for incoming messages from the server
-socket.on('chat message', (message) => {
+        socket.on('message', (message) => {
+    console.log('Received message from server:', message); // Log the received message
     addMessageToList(message);
 });
+        // Emit the message to the server
+        socket.emit('message', message);
+        input.value = ''; // Clear the input field
+    }
+    
+});
+
+
      
     </script>
 </body>

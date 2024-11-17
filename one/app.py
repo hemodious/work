@@ -5,6 +5,7 @@ from my_module import chat_connection
 from flask import Flask 
 from endpoints import api
 app = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins='*')  
 CORS(app)
 app.register_blueprint(api)
 socketio= SocketIO(app)

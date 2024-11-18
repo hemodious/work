@@ -1,4 +1,4 @@
-from flask import Blueprint ,request,jsonify,render_template
+from flask import Blueprint ,request,jsonify,render_template,redirect,url_for
 #databasee connection
 from my_module import db_connection
 import smtplib
@@ -7,6 +7,19 @@ from email.mime.text import  MIMEText
 from  my_module import chat_connection
 import random
 import string
+
+def gene_pss():
+     characters=string.ascii_letters+ string.digits*4
+
+     ans=''.join(random.choices(characters, k=7) )
+     store=[] 
+     for good in store:
+         if good == ans :
+            return("already exists")
+         else:
+            store.append(ans)  
+            return(ans)   
+
 api = Blueprint('api', __name__)
 @api.route('/user',methods=['GET','POST'])#route to  get all user data/ create  new user
 def user():
@@ -41,17 +54,9 @@ def user():
         else:
             image_data=None    
         
-        characters=string.ascii_letters+ string.digits*4
-
-        ans=''.join(random.choices(characters, k=7) )
-        store=[] 
-        for good in store:
-         if good == ans :
-            return("already exists")
-         else:
-            store.append(ans)  
-            return(ans)   
-        new_complaint_id=ans
+        
+        new_complaint_id=gene_pss()
+    
         #inserting the data into the table
         sql="""INSERT INTO user (name,telephone,complaint,email,category,image,complaint_id)
         VALUES (?,?,?,?,?,?,?)"""
@@ -182,6 +187,9 @@ def  chatroom_login():
     Password=request.form['password']
     if Password=="password":
         return chatroom()
+@api.route('/st',methods=['GET'])
+def stff_login():
+    return render_template('login.html')    
         
 @api.route('/chatlogin',methods=['GET'])#sends the staff to the chatroomlogin page
 def Login():

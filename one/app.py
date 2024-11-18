@@ -6,8 +6,8 @@ from my_module import chat_connection
 from flask import Flask 
 from endpoints import api
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins='*')  
-CORS(app, resources={r"/socket.io/*": {"origins": "https://customer-complaint.onrender.com"}})  # Allow your client origin
+
+CORS(app)  # Allow your client origin
 
 app.register_blueprint(api)
 socketio= SocketIO(app)
@@ -31,4 +31,4 @@ def handlemessages(data):
 
 if __name__ == '__main__':
     #
-   socketio.run(app, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=True)
+   socketio.run(app,debug=True)

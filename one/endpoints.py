@@ -1,4 +1,4 @@
-from flask import Blueprint ,request,jsonify,render_template
+from flask import Blueprint,send_file ,request,jsonify,render_template
 #databasee connection
 from my_module import db_connection
 import smtplib
@@ -7,7 +7,37 @@ from email.mime.text import  MIMEText
 import random
 import string
 import datetime
+from io import BytesIO
 api = Blueprint('api', __name__)
+
+def get_image_data(image):
+    # This function should return the binary data for the image based on the image_id
+    # Replace this with actual logic to retrieve image data from your database or file system
+    conn = db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT image FROM user WHERE id = ?", (image,))
+    image_data = cursor.fetchone()
+    conn.close()
+    
+    if image:
+        return image[6]  # Assuming image data is in the first column
+    return None
+
+@api.route('/download/<int:image_id>')
+def download(image_id):
+    # Get the binary image data for the given image_id
+    image_data = get_image_data(image_id)
+    
+    if image_data is None:
+        return jsonify({"error": "Image not found"}), 404
+    
+    # Create a BytesIO object from the binary data
+    image_io = BytesIO(image_data)
+    image_io.seek(0)  # Move to the start of the BytesIO object
+    
+    return send_file(image_io, mimetype='image/png', as_attachment=True, download_name='image.png')
+
+
 @api.route('/user',methods=['GET','POST'])#route to  get all user data/ create  new user
 def user():
     conn=db_connection()#opening the database connection
@@ -15,7 +45,7 @@ def user():
     if request.method == 'GET':
         cursor= conn.execute("SELECT * FROM user")#querying the table to get all user data
         users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[9])
+            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"download/{row[6]}",complaint_id=row[9])
             for row in cursor.fetchall()
         ]#store  the data in a list of dictionaries
 
@@ -123,7 +153,7 @@ def staff1():
     issues=('transaction issue','account management issue','security issue')
     cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?)',issues)
     users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[9], date=row[11],status=row[10])
+            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"download/{row[6]}",complaint_id=row[9], date=row[11],status=row[10])
             for row in cursor.fetchall()
         ]
     conn.close()
@@ -136,7 +166,7 @@ def staff2():
     issues=('crash issue','perfomance management issue','others')
     cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?)',issues)
     users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[9], date=row[11],status=row[10] )
+            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"download/{row[6]}",complaint_id=row[9], date=row[11],status=row[10] )
             for row in cursor.fetchall()
         ]
     return jsonify(users)
@@ -216,3 +246,5 @@ def update_status():
     conn.close()   # Close the connection
 
     return jsonify({"message": "Status updated successfully", "updated_at": current_time.isoformat()}), 200
+
+

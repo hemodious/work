@@ -1,6 +1,6 @@
 import sqlite3
 
-conn = sqlite3.connect("user.sqlite")
+conn = sqlite3.connect("user1.sqlite")
 
 
 cursor =conn.cursor()
@@ -10,7 +10,7 @@ sql_query=""" CREATE TABLE user (
     telephone integer NOT NULL,
     complaint text NOT NULL,
     email  text NOT NULL,
-    category text NOT NULL,
+    category text NOT NULL
 )"""
 cursor.execute("""ALTER TABLE user ADD COLUMN complaint_id""")
 conn.commit()

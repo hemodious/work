@@ -2,7 +2,7 @@
 import os
 from flask_socketio import  SocketIO, send
 from flask_cors import  CORS
-from my_module import chat_connection
+#from my_module import chat_connection
 from flask import Flask 
 from endpoints import api
 app = Flask(__name__)
@@ -21,7 +21,7 @@ def handlemessages(data):
     username= data['username']
     message= data['message']
 
-    conn= chat_connection()
+    conn= ''
     cursor= conn.cursor()
     cursor.execute("INSERT INTO chat_messages (username, message) VALUES (?, ?)", (username, message))
     conn.commit()

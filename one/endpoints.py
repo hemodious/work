@@ -1,25 +1,12 @@
-from flask import Blueprint ,request,jsonify,render_template,redirect,url_for
+from flask import Blueprint ,request,jsonify,render_template
 #databasee connection
 from my_module import db_connection
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import  MIMEText
-from  my_module import chat_connection
 import random
 import string
-
-def gene_pss():
-     characters=string.ascii_letters+ string.digits*4
-
-     ans=''.join(random.choices(characters, k=7) )
-     store=[] 
-     for good in store:
-         if good == ans :
-            return("already exists")
-         else:
-            store.append(ans)  
-            return(ans)   
-
+import datetime
 api = Blueprint('api', __name__)
 @api.route('/user',methods=['GET','POST'])#route to  get all user data/ create  new user
 def user():
@@ -54,9 +41,16 @@ def user():
         else:
             image_data=None    
         
-        
-        new_complaint_id=gene_pss()
-    
+        characters=string.ascii_letters+ string.digits*4
+        ans=''.join(random.choices(characters, k=7) )
+        store=[] 
+        for good in store:
+         if good == ans :
+            return("already exists")
+         else:
+            store.append(ans)  
+            return(ans)   
+        new_complaint_id=ans
         #inserting the data into the table
         sql="""INSERT INTO user (name,telephone,complaint,email,category,image,complaint_id)
         VALUES (?,?,?,?,?,?,?)"""
@@ -129,7 +123,7 @@ def staff1():
     issues=('transaction issue','account management issue','security issue')
     cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?)',issues)
     users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[9])
+            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[9], date=row[11],status=row[10])
             for row in cursor.fetchall()
         ]
     conn.close()
@@ -142,7 +136,7 @@ def staff2():
     issues=('crash issue','perfomance management issue','others')
     cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?)',issues)
     users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[9])
+            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=[6],complaint_id=row[9], date=row[11],status=row[10] )
             for row in cursor.fetchall()
         ]
     return jsonify(users)
@@ -180,16 +174,11 @@ def  login():
 @api.route('/dashboard1',methods=['GET'])
 def dashboard1():
     return render_template('dashboard1.html')
+
 @api.route('/dashboard2',methods=['GET'])
 def dashboard2():
     return render_template('dashboard2.html')
-def  chatroom_login():
-    Password=request.form['password']
-    if Password=="password":
-        return chatroom()
-@api.route('/st',methods=['GET'])
-def stff_login():
-    return render_template('login.html')    
+
         
 @api.route('/chatlogin',methods=['GET'])#sends the staff to the chatroomlogin page
 def Login():
@@ -199,13 +188,31 @@ def Login():
 def chatroom():
     return render_template('chatroom.html')
 
-@api.route('/chatroom_messages',methods=['GET'])
-def get_messages():
-    conn = chat_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT username, message FROM chat_messages')
-    messages = cursor.fetchall()
-    message_list= [{'username': msg[0], 'message': msg[1]} for msg in messages]
-    return jsonify(message_list), 200
+
 def staff_login() :
     return render_template('login.html')
+
+@api.route('/update_status', methods=['POST'])
+def update_status():
+    conn = db_connection()  # Open the database connection
+    cursor = conn.cursor()
+
+    # Get the complaint_id and new_status from the request
+    complaint_id = request.form['complaint_id']
+    new_status = request.form['status']
+
+    if not new_status:
+        new_status="unresolved"
+
+    # Get the current date and time
+    current_time = datetime.datetime.now()
+
+    # SQL query to update the status and the timestamp
+    sql = """UPDATE user SET status = ?, date = ? WHERE complaint_id = ?"""
+    
+    # Execute the query
+    cursor.execute(sql, (new_status, current_time, complaint_id))
+    conn.commit()  # Commit the changes
+    conn.close()   # Close the connection
+
+    return jsonify({"message": "Status updated successfully", "updated_at": current_time.isoformat()}), 200

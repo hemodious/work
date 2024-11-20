@@ -30,4 +30,47 @@ document.getElementById('login-form').addEventListener('submit', function(event)
         
     })
     
-    });
+});
+
+//loading screen
+const loginButton = document.getElementById('loginButton');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        loginButton.addEventListener('click', async () => {
+            // Show loading spinner
+            loadingOverlay.style.display = 'flex';
+
+            try {
+                // Simulate API login (replace with actual API call)
+                await fakeApiCall();
+
+                // Redirect to dashboard
+                window.location.href = 'dashboard.html'; // Replace with your redirect URL
+            } catch (error) {
+                alert('Login failed! Please try again.');
+            } finally {
+                // Hide loading spinner after redirect or error
+                loadingOverlay.style.display = 'none';
+            }
+        });
+
+        // Simulate a fake API call for demonstration purposes
+        async function fakeApiCall() {
+            return new Promise((resolve) => setTimeout(resolve, 3000)); // Simulates a 3-second API call
+        }
+
+//Toggle passwor
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggle-password');
+
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text'; // Show password
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash'); // Change icon
+            } else {
+                passwordField.type = 'password'; // Hide password
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye'); // Change icon
+            }
+        }

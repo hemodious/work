@@ -53,7 +53,7 @@ def user():
     if request.method == 'GET':
         cursor= conn.execute("SELECT * FROM user")#querying the table to get all user data
         users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"/download/{row[0]}",complaint_id=row[9])
+            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"https://customer-complaint.onrender.com//download/{row[0]}",complaint_id=row[9])
             for row in cursor.fetchall()
         ]#store  the data in a list of dictionaries
 
@@ -161,7 +161,7 @@ def staff1():
     issues=('transaction issue','account management issue','security issue')
     cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?)',issues)
     users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"/download/{row[0]}",complaint_id=row[9], date=row[11],status=row[10])
+            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"https://customer-complaint.onrender.com//download/{row[0]}",complaint_id=row[9], date=row[11],status=row[10])
             for row in cursor.fetchall()
         ]
     conn.close()
@@ -174,7 +174,7 @@ def staff2():
     issues=('crash issue','perfomance management issue','others')
     cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?)',issues)
     users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"/download/{row[0]}",complaint_id=row[9], date=row[11],status=row[10] )
+            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"https://customer-complaint.onrender.com//download/{row[0]}",complaint_id=row[9], date=row[11],status=row[10] )
             for row in cursor.fetchall()
         ]
     return jsonify(users)

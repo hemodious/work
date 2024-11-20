@@ -8,19 +8,18 @@ import random
 import string
 import datetime
 from io import BytesIO
+from PIL import Image
 api = Blueprint('api', __name__)
 
-def get_image_data(image):
-    # This function should return the binary data for the image based on the image_id
-    # Replace this with actual logic to retrieve image data from your database or file system
+def get_image_data(image_id):
     conn = db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT image FROM user WHERE id = ?", (image,))
-    image_data = cursor.fetchone()
+    cursor.execute("SELECT image FROM user WHERE id = ?", (image_id,))
+    row = cursor.fetchone()
     conn.close()
     
-    if image:
-        return image[6]  # Assuming image data is in the first column
+    if row:
+        return row[0]  # Assuming image data is in the first column
     return None
 
 @api.route('/download/<int:image_id>')
@@ -35,8 +34,17 @@ def download(image_id):
     image_io = BytesIO(image_data)
     image_io.seek(0)  # Move to the start of the BytesIO object
     
-    return send_file(image_io, mimetype='image/png', as_attachment=True, download_name='image.png')
-
+    # Open the image using Pillow
+    image = Image.open(image_io)
+    
+    # Create a new BytesIO stream to save the converted image
+    output_io = BytesIO()
+    
+    # Save the image in the desired format (JPEG or PNG)
+    image.save(output_io, format='PNG')  # Save as PNG; you can change to 'JPEG' if needed
+    output_io.seek(0)  # Move to the start of the BytesIO object
+    
+    return send_file(output_io, mimetype='image/png', as_attachment=True, download_name='image.png')
 
 @api.route('/user',methods=['GET','POST'])#route to  get all user data/ create  new user
 def user():
@@ -45,7 +53,7 @@ def user():
     if request.method == 'GET':
         cursor= conn.execute("SELECT * FROM user")#querying the table to get all user data
         users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"download/{row[6]}",complaint_id=row[9])
+            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"/download/{row[0]}",complaint_id=row[9])
             for row in cursor.fetchall()
         ]#store  the data in a list of dictionaries
 

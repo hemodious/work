@@ -37,8 +37,8 @@
                     throw new Error('Network response was not ok');
                 }
                 const users = await response.json();
-                displayUsers(users);
-            } catch (error) {
+displayUsers(users);
+                            } catch (error) {
                 console.error('Error fetching user data:', error);
                 document.getElementById('errorMessage').innerText = 'Failed to load user data. Please try again later.';
             }
@@ -52,31 +52,39 @@
         }
 
         // Function to display users on the webpage
-        function displayUsers(users) {
-            const userList = document.getElementById('userList');
-            userList.innerHTML = ''; // Clear existing content
+        // Function to display users on the webpage
+function displayUsers(users) {
+    const userList = document.getElementById('userList');
+    userList.innerHTML = ''; // Clear existing content
 
-            if (!Array.isArray(users) || users.length === 0) {
-                userList.innerHTML = '<p>No users found.</p>';
-                return;
-            }
+    if (!Array.isArray(users) || users.length === 0) {
+        userList.innerHTML = '<p>No users found.</p>';
+        return;
+    }
 
-            users.forEach(user => {
-                const userDiv = document.createElement('div');
-                userDiv.className = 'user';
-                userDiv.innerHTML = `
-                    <h2>${sanitizeInput(user.name)}</h2>
-                    <p><strong>Telephone:</strong> ${sanitizeInput(user.telephone)}</p>
-                    <p><strong>Complaint:</strong> ${sanitizeInput(user.complaint)}</p>
-                    <p><strong>Email:</strong> ${sanitizeInput(user.email)}</p>
-                    <p><strong>Category:</strong> ${sanitizeInput(user.category)}</p>
-                    <p><strong>Complaint ID:</strong> ${sanitizeInput(user.complaint_id)}</p>
-                    ${user.image ? `<p><a href="${sanitizeInput(user.image)}" download>Download Image</a></p>` : ''}
-                `;
-                userList.appendChild(userDiv);
-            });
+    users.forEach(user => {
+        const userDiv = document.createElement('div');
+        userDiv.className = 'user';
+        
+        // Convert binary image data to base64
+        let imageSrc = '';
+        if (user.image) {
+            imageSrc = 'data:image/jpeg;base64,' + btoa(String.fromCharCode(...new Uint8Array(user.image)));
         }
 
+        userDiv.innerHTML = `
+            <h2>${sanitizeInput(user.name)}</h2>
+            <p><strong>Telephone:</strong> ${sanitizeInput(user.telephone)}</p>
+            <p><strong>Complaint:</strong> ${sanitizeInput(user.complaint)}</p>
+            <p><strong>Email:</strong> ${sanitizeInput(user.email)}</p>
+            <p><strong>Category:</strong> ${sanitizeInput(user.category)}</p>
+            <p><strong>Complaint ID:</strong> ${sanitizeInput(user.complaint_id)}</p>
+            ${user.image ? `<img src="${imageSrc}" alt="User  Image" style="max-width: 100%; height: auto;"/>` : ''}
+            ${user.image ? `<p><a href="${sanitizeInput(user.image)}" download>Download Image</a></p>` : ''}
+        `;
+        userList.appendChild(userDiv);
+    });
+}
         // Fetch user data when the page loads
         document.addEventListener('DOMContentLoaded', fetchUserData);
     </script>

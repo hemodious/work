@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #f7dcbd #FAFCFF;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+body{
+    background: rgb(178,230,241);
+    /*background: linear-gradient(165deg, rgba(178,230,241,1) 0%, rgba(249,255,253,1) 100%);*/
+}
+.container{
+    max-width: 800px;
+    max-height: 800px;
+    background-color: #fff;
+    padding: 50px;
+    border-radius: 10px;
+    margin: 150px auto;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+}
+ #check{
+    font-size: 150px;
+    margin: 0px 275px;
+    color: rgb(41, 202, 8) ;
+}
+button{
+    background-color: #0071FF;
+    padding: 10px;
+    font-weight: 500;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #fff;
+    position: relative;
+    left: 250px;
+    right: 150px;
+}
+.Message{
+    position: relative;
+    left: 240px;
+    right: 250px;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <i class="fa-regular fa-circle-check" id="check"></i>
+        <h1 class="Message">Issue Submitted</h1>
+        <h3>Your complaint has been submitted successfuly, we will get back to you soon. Thank you for your patience.</h3>
+        <h3>Complaint ID: <span id="complaint_ID"></span></h3>
+        <button id="reset"> <i class="fa-solid fa-rotate-right"></i> Send another complaint</button>
+    </div>
+<script>
+       // Function to fetch the complaint ID from the API
+       async function fetchComplaintID() {
+            try {
+                // API endpoint to fetch the complaint data
+                const apiUrl = 'https://customer-complaint.onrender.com/user'; // Replace with your actual API endpoint
+                
+                // Fetch the complaint data
+                const response = await fetch(apiUrl);
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch complaint details.');
+                }
+
+                const data = await response.json(); // Parse the JSON response
+
+                // Display the complaint ID
+                const complaintIDElement = document.getElementById('complaint_ID');
+                if (data && data.complaint_id) {
+                    complaintIDElement.textContent = data.complaint_id;
+                } else {
+                    complaintIDElement.textContent = 'Not available';
+                }
+            } catch (error) {
+                console.error('Error fetching complaint ID:', error);
+                document.getElementById('complaint_ID').textContent = 'Error loading complaint ID.';
+            }
+        }
+
+        // Add an event listener to the reset button to redirect
+        document.getElementById('reset').addEventListener('click', () => {
+            window.location.href = 'index.html'; // Replace with your actual form page URL
+        });
+
+        // Call the function to fetch the complaint ID
+        fetchComplaintID();
+</script>
+</body>
+</html>

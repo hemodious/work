@@ -1,4 +1,4 @@
-from flask import Blueprint,send_file ,request,jsonify,render_template
+from flask import Blueprint,send_file ,request,jsonify,render_template,redirect,url_for, session, flash
 #databasee connection
 from my_module import db_connection
 import smtplib
@@ -53,7 +53,7 @@ def user():
     if request.method == 'GET':
         cursor= conn.execute("SELECT * FROM user")#querying the table to get all user data
         users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"https://customer-complaint.onrender.com//download/{row[0]}",complaint_id=row[9])
+            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"https://customer-complaint.onrender.com//download/{row[0]}",complaint_id=row[9],status=row[10])
             for row in cursor.fetchall()
         ]#store  the data in a list of dictionaries
 
@@ -180,53 +180,76 @@ def staff2():
     return jsonify(users)
 
 
-
-@api.route('/login',methods=['POST'])
-#authenticate staff upon login
-def  login():
-    user_email=request.form['email']
-    user_password=request.form['password']
-    if user_email== "affoh.emmanuel.ea@gmail.com" and user_password=="password":
-       return jsonify({
+@api.route('/login', methods=['POST'])
+def login():
+    user_email = request.form['email']
+    user_password = request.form['password']
+    
+    # Authentication logic
+    if user_email == "affoh.emmanuel.ea@gmail.com" and user_password == "password":
+        session['logged_in'] = True  # Set logged in session
+        session['user_email'] = user_email
+        return jsonify({
             "message": "Login successful",
-            "redirectUrl": "https://customer-complaint.onrender.com/dashboard1"  # URL to redirect to
+            "redirectUrl": url_for('api.dashboard1')  # Redirect to dashboard1
         }), 200
-    elif user_email== "affoh.emmanuel.ea@gmail.com" and user_password!="password":
+    elif user_email == "michaelopoku790@gmail.com" and user_password == "password":
+        session['logged_in'] = True  # Set logged in session
+        session['user_email'] = user_email
         return jsonify({
-            "message": "invalid password",
-                }), 200
-    elif user_email == "michaelopoku790@gmail.com" and user_password=="password":
-          return jsonify({
             "message": "Login successful",
-            "redirectUrl": "https://customer-complaint.onrender.com/dashboard2"  # URL to redirect to
+            "redirectUrl": url_for('api.dashboard2')  # Redirect to dashboard2
         }), 200
-    elif user_email  == "michaelopoku790@gmail.com" and user_password!="password":
+    else:
         return jsonify({
-            "message": "invalid password",
-                }), 200
-    else : 
-        return jsonify({
-            "message": "invalid password",
-                }), 200
+            "message": "Invalid credentials",
+        }), 401
 
-@api.route('/dashboard1',methods=['GET'])
+@api.route('/dashboard1', methods=['GET'])
 def dashboard1():
+    if not session.get('logged_in'):
+        return redirect(url_for('api.staff_login'))  # Redirect to login if not logged in
     return render_template('dashboard1.html')
 
-@api.route('/dashboard2',methods=['GET'])
+@api.route('/dashboard2', methods=['GET'])
 def dashboard2():
+    if not session.get('logged_in'):
+        return redirect(url_for('api.staff_login'))  # Redirect to login if not logged in
     return render_template('dashboard2.html')
+
+@api.route('/logout')
+def logout():
+    session.pop('logged_in', None)  # Remove logged in session
+    session.pop('user_email', None)  # Remove user email from session
+    return redirect(url_for('api.staff_login'))  # Redirect to login page
 
         
 @api.route('/chatlogin',methods=['GET'])#sends the staff to the chatroomlogin page
 def Login():
     return render_template('chatlogin.html')
 
-@api.route('/chatroom',methods=['GET'])#sends the staff to the chatroom
+@api.route('/chatroom',methods=['GET'])
 def chatroom():
     return render_template('chatroom.html')
 
+@api.route('/chatroom_messages', methods=['GET'])
+def get_chat_messages():
+    conn = db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT username, message, timestamp 
+        FROM chat_messages 
+        ORDER BY timestamp DESC 
+        LIMIT 50
+    """)
+    messages = [
+        {'username': row[0], 'message': row[1], 'timestamp': row[2]}
+        for row in cursor.fetchall()
+    ]
+    conn.close()
+    return jsonify(messages)
 
+@api.route('/staff_login',methods=['GET'])
 def staff_login() :
     return render_template('login.html')
 
@@ -256,3 +279,9 @@ def update_status():
     return jsonify({"message": "Status updated successfully", "updated_at": current_time.isoformat()}), 200
 
 
+@api.route('/complaint',methods=['GET'])
+def complaint():
+    return render_template("index.html")
+@api.route('/success',methods=['GET'])
+def success():
+    return render_template("success_page.html")

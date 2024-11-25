@@ -1,6 +1,6 @@
 // Function to fetch data from the API and populate the table
 async function populateTable() {
-    const apiUrl = 'https://customer-complaint.onrender.com/staff1';  // Replace with your actual API URL
+    const apiUrl = ' https://customer-complaint.onrender.com/staff1';  // Replace with your actual API URL
   
     try {
         // Fetch the data from the API
@@ -43,7 +43,7 @@ async function populateTable() {
             // Status column
             const statusCell = document.createElement('td');
             const statusDiv = document.createElement('div');
-            statusDiv.textContent = item.status; // Default to 'Unresolved'
+            statusDiv.textContent = 'unresolved'; // Default to 'Unresolved'
             statusCell.value = 'unresolved'
             statusDiv.classList.add('status-cell');
             statusCell.appendChild(statusDiv);
@@ -119,45 +119,40 @@ async function populateTable() {
     });
   
     // Resolve button functionality
-  const resolveButton = document.getElementById('resolve-button');
-  resolveButton.addEventListener('click', async () => {
-      try {
-          // Data to send to the server
-          const payload = {
-              "complaint_id": item.complaint_id,
-              "status": "Resolved"
-          };
-  
-          // URL for the API endpoint that updates the status
-          const apiUrl = 'https://customer-complaint.onrender.com/update_status'; // Replace with your actual API endpoint
-  
-          // Make the POST request
-          const response = await fetch(apiUrl, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json', // Specify JSON payload
-              },
-              body: JSON.stringify(payload), // Convert the payload to a JSON string
-          });
-  
-          if (!response.ok) {
-              throw new Error('Failed to update status. Please try again.');
-          }
-  
-          // Handle the success response
-          const result = await response.json(); // Parse the response if needed
-  
-          // Update the UI after a successful response
-          statusDiv.textContent = 'Resolved'; // Update status in the table
-          statusDiv.style.border = '2px solid green';
-          statusDiv.style.color = 'green';
-  
-          alert('Complaint has been resolved!');
-      } catch (error) {
-          console.error('Error resolving complaint:', error);
-          alert('Failed to resolve complaint. Please try again.');
-      }
-  });
+    const resolveButton = document.getElementById('resolve-button');
+    resolveButton.addEventListener('click', async () => {
+        try {
+            // Create a FormData object to send form data
+            const formData = new FormData();
+            formData.append('complaint_id', item.complaint_id); // Add complaint_id
+            formData.append('status', 'Resolved'); // Add status
+    
+            // URL for the API endpoint that updates the status
+            const apiUrl = ' https://customer-complaint.onrender.com/update_status'; // Replace with your actual API endpoint
+    
+            // Make the POST request
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                body: formData, // Send form data
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to update status. Please try again.');
+            }
+    
+            
+    
+            // Update the UI after a successful response
+            statusDiv.textContent = 'Resolved'; // Update status in the table
+            statusDiv.style.border = '2px solid green';
+            statusDiv.style.color = 'green';
+    
+            alert('Complaint has been resolved!');
+        } catch (error) {
+            console.error('Error resolving complaint:', error);
+            alert('Failed to resolve complaint. Please try again.');
+        }
+    });
   
   
     // Call button functionality
@@ -224,7 +219,7 @@ async function populateTable() {
       confirmButton.onclick = () => {
           modal.style.display = 'none';
           // Redirect to the login page
-          window.location.href = 'login.html'; // Replace with the actual login page URL
+          window.location.href = ' https://customer-complaint.onrender.com/staff_login'; // Replace with the actual login page URL
       };
   
       // Cancel Logout

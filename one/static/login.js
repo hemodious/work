@@ -5,35 +5,8 @@ document.getElementById('login-form').addEventListener('submit', function(event)
     const password = document.getElementById('password').value;
 
     // Send a POST request to the Flask backend
-    fetch('https://customer-complaint.onrender.com/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            'email': email,
-            'password': password
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json(); // Expecting a JSON response
-    })
-    .then(data => {
-        console.log('Server response:', data.redirectUrl);
-       
-        // Check if redirectUrl is present in the response
-      
-            window.location.href = data.redirectUrl; // Redirect to the URL returned by the server
-        
-    })
     
-});
-
-//loading screen
-const loginButton = document.getElementById('loginButton');
+    const loginButton = document.getElementById('loginButton');
         const loadingOverlay = document.getElementById('loadingOverlay');
 
         loginButton.addEventListener('click', async () => {
@@ -43,9 +16,33 @@ const loginButton = document.getElementById('loginButton');
             try {
                 // Simulate API login (replace with actual API call)
                 await fakeApiCall();
-
+                fetch('https://customer-complaint.onrender.com/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        'email': email,
+                        'password': password
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json(); // Expecting a JSON response
+                })
+                .then(data => {
+                    console.log('Server response:', data.redirectUrl);
+                   
+                    // Check if redirectUrl is present in the response
+                    window.location.href = data.redirectUrl;
+                  
+                       // Redirect to the URL returned by the server
+                    
+                })
                 // Redirect to dashboard
-                window.location.href = 'dashboard.html'; // Replace with your redirect URL
+              // Replace with your redirect URL
             } catch (error) {
                 alert('Login failed! Please try again.');
             } finally {
@@ -74,3 +71,7 @@ const loginButton = document.getElementById('loginButton');
                 toggleIcon.classList.add('fa-eye'); // Change icon
             }
         }
+    
+});
+
+//loading screen

@@ -110,9 +110,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.0/socket.io.js"></script>
 
     <script>
-       const socket = io('https://customer-complaint.onrender.com', {
-    transports: ['polling', 'websocket']
-});
+        const socket = io(window.location.origin, {
+            transports: ['websocket', 'polling']
+        });
 socket.on('connect', () => {
             console.log('Connected to server');
         });

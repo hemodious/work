@@ -1,6 +1,6 @@
 // Function to fetch data from the API and populate the table
 async function populateTable() {
-    const apiUrl = ' https://customer-complaint.onrender.com/staff1';  // Replace with your actual API URL
+    const apiUrl = 'http://127.0.0.1:5000/staff1';  // Replace with your actual API URL
   
     try {
         // Fetch the data from the API
@@ -128,7 +128,7 @@ async function populateTable() {
             formData.append('status', 'Resolved'); // Add status
     
             // URL for the API endpoint that updates the status
-            const apiUrl = ' https://customer-complaint.onrender.com/update_status'; // Replace with your actual API endpoint
+            const apiUrl = 'http://127.0.0.1:5000/update_status'; // Replace with your actual API endpoint
     
             // Make the POST request
             const response = await fetch(apiUrl, {
@@ -219,7 +219,7 @@ async function populateTable() {
       confirmButton.onclick = () => {
           modal.style.display = 'none';
           // Redirect to the login page
-          window.location.href = ' https://customer-complaint.onrender.com/staff_login'; // Replace with the actual login page URL
+          window.location.href = 'http://127.0.0.1:5000/staff_login'; // Replace with the actual login page URL
       };
   
       // Cancel Logout

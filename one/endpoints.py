@@ -72,6 +72,7 @@ def user():
         new_email=request.form['email']
         new_category=request.form['category']
         #file handling
+       
         new_image=request.files.get('image')
         #checks if the image is empty or not 
         if  new_image:
@@ -89,13 +90,14 @@ def user():
             store.append(ans)  
             return(ans)   
         new_complaint_id=ans
+        update_status="unresolved"
         #inserting the data into the table
-        sql="""INSERT INTO user (name,telephone,complaint,email,category,image,complaint_id)
-        VALUES (?,?,?,?,?,?,?)"""
+        sql="""INSERT INTO user (name,telephone,complaint,email,category,image,complaint_id,status)
+        VALUES (?,?,?,?,?,?,?,?)"""
 
         # executing the query
 
-        cursor=cursor.execute(sql,(new_name,new_telephone,new_complaint,new_email,new_category,image_data,new_complaint_id))
+        cursor=cursor.execute(sql,(new_name,new_telephone,new_complaint,new_email,new_category,image_data,new_complaint_id,update_status))
         conn.commit()
         conn.close()
         #code to send  email to clients

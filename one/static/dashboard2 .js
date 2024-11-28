@@ -125,10 +125,10 @@ function showDetails(item, statusDiv) {
           // Create a FormData object to send form data
           const formData = new FormData();
           formData.append('complaint_id', item.complaint_id); // Add complaint_id
-          formData.append('status', 'Resolved'); // Add status
+          formData.append('status', 'resolved'); // Add status
   
           // URL for the API endpoint that updates the status
-          const apiUrl = 'http://127.0.0.1:5000/update_status'; // Replace with your actual API endpoint
+          const apiUrl = '/update_status'; // Replace with your actual API endpoint
   
           // Make the POST request
           const response = await fetch(apiUrl, {

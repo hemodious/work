@@ -1,7 +1,8 @@
 // Function to fetch data from the API and populate the table
 async function populateTable() {
-    const apiUrl = 'http://127.0.0.1:5000/staff1';  // Replace with your actual API URL
-  
+
+      const apiUrl ='http://127.0.0.1:5000/staff1';  // Replace with your actual API URL
+
     try {
         // Fetch the data from the API
         const response = await fetch(apiUrl, { mode: 'cors' });
@@ -44,7 +45,8 @@ async function populateTable() {
             const statusCell = document.createElement('td');
             const statusDiv = document.createElement('div');
             statusDiv.textContent = item.status;
-            statusCell.value = 'unresolved'
+
+            statusCell.value = item.status;
             statusDiv.classList.add('status-cell');
             if(item.status=='resolved'){
                 statusDiv.classList.add('resolved');
@@ -84,7 +86,7 @@ async function populateTable() {
     } catch (error) {
         console.error('Error populating the table:', error);
     }
-  }
+}
   
   // Function to show detailed information about a complaint
   function showDetails(item, statusDiv) {
@@ -134,8 +136,9 @@ async function populateTable() {
             formData.append('status', 'resolved'); // Add status
     
             // URL for the API endpoint that updates the status
-            const apiUrl = 'http://127.0.0.1:5000/update_status'; // Replace with your actual API endpoint
-    
+
+            const apiUrl ='http://127.0.0.1:5000/update_status'; // Replace with your actual API endpoint
+
             // Make the POST request
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -224,9 +227,9 @@ async function populateTable() {
       confirmButton.onclick = () => {
           modal.style.display = 'none';
           // Redirect to the login page
-          window.location.href = 'http://127.0.0.1:5000/staff_login'; // Replace with the actual login page URL
-      };
-  
+
+          window.location.href ='http://127.0.0.1:5000/staff_login'; // Replace with the actual login page URL
+          }}
       // Cancel Logout
       cancelButton.onclick = () => {
           modal.style.display = 'none';
@@ -239,7 +242,8 @@ async function populateTable() {
               modal.style.display = 'none';
           }
       };
-  }
+
   
   
   
+

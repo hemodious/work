@@ -50,23 +50,16 @@ const selectedCategory = document.querySelector('input[name="report-reason"]:che
   })
   .then(response => {
     console.log(response)
+    window.location.href = response.url;
     if (!response.ok) {
       throw new Error('Network response was not ok ' + response.statusText);
     }
     return response.json();
   })
-  .then(data => {
-
-    
-    window.location.href = '/success'; // Relative path to the success page
-    
-    document.getElementById('response').innerText = 'Success: ' + JSON.stringify(data);
-   
-  })
+  
   .catch((error) => {
     console.error('Error:', error);
-    document.getElementById('response').innerText = 'Error: ' + error;
-  });
+  })
 };
 
 //Email validation

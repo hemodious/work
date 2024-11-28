@@ -44,8 +44,14 @@ async function populateTable() {
           const statusCell = document.createElement('td');
           const statusDiv = document.createElement('div');
           statusDiv.textContent = item.status; // Default to 'Unresolved'
-          statusCell.value = 'unresolved'
-          statusDiv.classList.add('status-cell');
+          statusCell.value = item.status;
+          //Status cell colours
+          if(item.status=='resolved'){
+            statusDiv.classList.add('resolved');
+          }
+          else{
+            statusDiv.classList.add('status-cell');
+          }
           statusCell.appendChild(statusDiv);
 
           // View More button
@@ -125,7 +131,7 @@ function showDetails(item, statusDiv) {
           // Create a FormData object to send form data
           const formData = new FormData();
           formData.append('complaint_id', item.complaint_id); // Add complaint_id
-          formData.append('status', 'Resolved'); // Add status
+          formData.append('status', 'resolved'); // Add status
   
           // URL for the API endpoint that updates the status
           const apiUrl = 'http://127.0.0.1:5000/update_status'; // Replace with your actual API endpoint
@@ -143,10 +149,6 @@ function showDetails(item, statusDiv) {
           // Handle the success response
           const result = await response.json(); // Parse the response if needed
   
-          // Update the UI after a successful response
-          statusDiv.textContent = 'Resolved'; // Update status in the table
-          statusDiv.style.border = '2px solid green';
-          statusDiv.style.color = 'green';
   
           alert('Complaint has been resolved!');
       } catch (error) {

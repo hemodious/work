@@ -233,6 +233,19 @@ select{
     width: 90px;
     text-transform: uppercase;
 }
+.resolved{
+    border: 2px solid green;
+    color: green;
+    padding: 4px;
+    text-align: center;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 11px;
+    height: 30%;
+    width: 90px;
+    text-transform: uppercase;
+
+}
 #back-button{
     padding: 4px;
     border: 1px solid #0000;

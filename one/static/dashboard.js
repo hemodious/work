@@ -1,7 +1,8 @@
 // Function to fetch data from the API and populate the table
 async function populateTable() {
-    const apiUrl = 'http://127.0.0.1:5000/staff1';  // Replace with your actual API URL
-  
+
+      const apiUrl ='http://127.0.0.1:5000/staff1';  // Replace with your actual API URL
+
     try {
         // Fetch the data from the API
         const response = await fetch(apiUrl, { mode: 'cors' });
@@ -43,7 +44,7 @@ async function populateTable() {
             // Status column
             const statusCell = document.createElement('td');
             const statusDiv = document.createElement('div');
-            statusDiv.textContent = 'unresolved'; // Default to 'Unresolved'
+            statusDiv.textContent = item.status; // Default to 'Unresolved'
             statusCell.value = 'unresolved'
             statusDiv.classList.add('status-cell');
             statusCell.appendChild(statusDiv);
@@ -125,11 +126,12 @@ async function populateTable() {
             // Create a FormData object to send form data
             const formData = new FormData();
             formData.append('complaint_id', item.complaint_id); // Add complaint_id
-            formData.append('status', 'Resolved'); // Add status
+            formData.append('status', 'resolved'); // Add status
     
             // URL for the API endpoint that updates the status
-            const apiUrl = 'http://127.0.0.1:5000/update_status'; // Replace with your actual API endpoint
-    
+
+            const apiUrl ='http://127.0.0.1:5000/update_status'; // Replace with your actual API endpoint
+
             // Make the POST request
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -219,6 +221,10 @@ async function populateTable() {
       confirmButton.onclick = () => {
           modal.style.display = 'none';
           // Redirect to the login page
+
+          window.location.href ='http://127.0.0.1:5000/staff_login'; // Replace with the actual login page URL
+          }}
+
           window.location.href = 'http://127.0.0.1:5000/staff_login'; // Replace with the actual login page URL
       };
   
@@ -238,3 +244,4 @@ async function populateTable() {
   
   
   
+

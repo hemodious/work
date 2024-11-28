@@ -128,8 +128,9 @@ function showDetails(item, statusDiv) {
           formData.append('status', 'resolved'); // Add status
   
           // URL for the API endpoint that updates the status
+
           const apiUrl = '/update_status'; // Replace with your actual API endpoint
-  
+
           // Make the POST request
           const response = await fetch(apiUrl, {
               method: 'POST',

@@ -1,7 +1,8 @@
 // Function to fetch data from the API and populate the table
 async function populateTable() {
+
       const apiUrl ='http://127.0.0.1:5000/staff1';  // Replace with your actual API URL
-  
+
     try {
         // Fetch the data from the API
         const response = await fetch(apiUrl, { mode: 'cors' });
@@ -128,8 +129,9 @@ async function populateTable() {
             formData.append('status', 'resolved'); // Add status
     
             // URL for the API endpoint that updates the status
+
             const apiUrl ='http://127.0.0.1:5000/update_status'; // Replace with your actual API endpoint
-    
+
             // Make the POST request
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -219,5 +221,27 @@ async function populateTable() {
       confirmButton.onclick = () => {
           modal.style.display = 'none';
           // Redirect to the login page
+
           window.location.href ='http://127.0.0.1:5000/staff_login'; // Replace with the actual login page URL
           }}
+
+          window.location.href = 'http://127.0.0.1:5000/staff_login'; // Replace with the actual login page URL
+      };
+  
+      // Cancel Logout
+      cancelButton.onclick = () => {
+          modal.style.display = 'none';
+          alert("Logout canceled.");
+      };
+  
+      // Close modal when clicking outside of it
+      window.onclick = (event) => {
+          if (event.target === modal) {
+              modal.style.display = 'none';
+          }
+      };
+  }
+  
+  
+  
+

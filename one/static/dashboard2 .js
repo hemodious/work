@@ -151,6 +151,7 @@ function showDetails(item, statusDiv) {
           const result = await response.json(); // Parse the response if needed
   
           // Update the complaint status in the table
+          statusDiv.textContent = 'Resolved'; // Update the status text
           statusDiv.style.border = '2px solid green';
           statusDiv.style.color = 'green';
   

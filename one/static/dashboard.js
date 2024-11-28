@@ -152,6 +152,7 @@ async function populateTable() {
             
     
             // Update the UI after a successful response
+            statusDiv.textContent = 'Resolved';
             statusDiv.style.border = '2px solid green';
             statusDiv.style.color = 'green';
     

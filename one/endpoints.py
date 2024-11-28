@@ -319,7 +319,6 @@ def update_status():
         msg['Subject']="COMPLAINT RESOLVED"
 
         #body of message to user
-
         body=f"Dear Customer ,\n\n {complaint_id} ,your complaint has been resolved\n \nThank you "
         msg.attach(MIMEText(body,'plain'))
         try:

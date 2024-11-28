@@ -146,6 +146,11 @@ async function populateTable() {
                 throw new Error('Failed to update status. Please try again.');
             }
     
+            
+    
+            // Update the UI after a successful response
+            statusDiv.style.border = '2px solid green';
+            statusDiv.style.color = 'green';
     
             alert('Complaint has been resolved!');
         } catch (error) {

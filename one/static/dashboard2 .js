@@ -149,6 +149,9 @@ function showDetails(item, statusDiv) {
           // Handle the success response
           const result = await response.json(); // Parse the response if needed
   
+          // Update the complaint status in the table
+          statusDiv.style.border = '2px solid green';
+          statusDiv.style.color = 'green';
   
           alert('Complaint has been resolved!');
       } catch (error) {

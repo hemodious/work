@@ -140,8 +140,9 @@ def user():
                 server2.sendmail("moorleinternship@gmail.com","michaelopoku790@gmail.com",msg2.as_string())#dont forget to change the email
                 break
         server2.quit()
-    return jsonify({"complaint ID":new_complaint_id}),201
-       
+        return redirect(f'/success?complaintId={new_complaint_id}')
+
+   
 
 
 @api.route('/staff1',methods=['GET'])
@@ -339,5 +340,11 @@ def complaint():
 
 @api.route('/success',methods=['GET'])
 # function to display the success page
+# Get the complaint ID from the query parameters
 def success():
-    return render_template("success_page.html")
+    complaint_id = request.args.get('complaintId')
+    
+    # Fetch the complaint data (if needed)
+  
+    # Render the success page and pass the complaint ID
+    return render_template('success_page.html', complaint_id=complaint_id)

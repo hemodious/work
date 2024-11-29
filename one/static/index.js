@@ -29,7 +29,7 @@ const selectedCategory = document.querySelector('input[name="report-reason"]:che
     return false;
   }
   
-    alert('Success')
+    
   const formData = new FormData(); // Corrected here
   formData.append('name', document.getElementById('name').value);
   formData.append('telephone', document.getElementById('telephone').value);
@@ -50,23 +50,17 @@ const selectedCategory = document.querySelector('input[name="report-reason"]:che
   })
   .then(response => {
     console.log(response)
+    window.location.href = response.url;
+    alert('Success')
     if (!response.ok) {
       throw new Error('Network response was not ok ' + response.statusText);
     }
     return response.json();
   })
-  .then(data => {
-
-    
-    window.location.href = '/success'; // Relative path to the success page
-    
-    document.getElementById('response').innerText = 'Success: ' + JSON.stringify(data);
-   
-  })
+  
   .catch((error) => {
     console.error('Error:', error);
-    document.getElementById('response').innerText = 'Error: ' + error;
-  });
+  })
 };
 
 //Email validation

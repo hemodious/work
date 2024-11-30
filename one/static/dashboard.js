@@ -100,6 +100,7 @@ async function populateTable() {
         
           <p><strong>No.</strong> ${item.id}</p>
           <p><strong>Complaint ID:</strong> ${item.complaint_id} </p>
+          <p><strong>Time:</strong> ${item.time} </p>
           <p><strong>Name:</strong> ${item.name}</p>
           <p><strong>Email:</strong> ${item.email}</p>
           <p><strong>Telephone:</strong> ${item.telephone}</p>

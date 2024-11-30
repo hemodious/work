@@ -1,5 +1,6 @@
 //form validation
-function validateForm(){
+function validateForm(event){
+  event.preventDefault();
 const nameinput = document.getElementById('name').value.trim();
 const emailInput = document.getElementById('email').value.trim();
 const telephoneInput = document.getElementById('telephone').value.trim();

@@ -160,7 +160,7 @@ background-color: #fac7a2;
 	padding: 30px;
 	border-radius: 30px;
     display: grid;
-    margin: 50px auto;
+    margin: 5px auto;
 }
 .container p{
     justify-content: flex-start;

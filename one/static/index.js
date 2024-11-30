@@ -99,8 +99,9 @@ const selectImage = document.querySelector('.select-image');
 const inputFile = document.querySelector('#image-upload');
 const imgArea = document.querySelector('.img-area');
 
-selectImage.addEventListener('click', function () {
+selectImage.addEventListener('click', function (event) {
 	inputFile.click();
+  event.preventDefault();
 })
 
 inputFile.addEventListener('change', function () {

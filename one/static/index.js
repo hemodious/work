@@ -1,5 +1,5 @@
 //form validation
-function validateForm(event){
+document.querySelector('form').addEventListener('submit', function(event){
   event.preventDefault();
 const nameinput = document.getElementById('name').value.trim();
 const emailInput = document.getElementById('email').value.trim();
@@ -62,7 +62,7 @@ const selectedCategory = document.querySelector('input[name="report-reason"]:che
   .catch((error) => {
     console.error('Error:', error);
   })
-};
+});
 
 //Email validation
 function validateEmail() {

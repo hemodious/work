@@ -22,7 +22,7 @@ body{
     border-radius: 4px;
     display: flex;
     scroll-behavior: smooth;
-    flex-wrap: wrap;
+    
     overflow-y: auto; /* Enable scrolling if content overflows */
     
 }

@@ -231,7 +231,8 @@ background-color: #fac7a2;
 }
 .select-image {
 	display: block;
-	width: 100%;
+	width: 50%;
+    justify-content: center;
 	padding: 16px 0;
 	border-radius: 15px;
 	background: var(--blue);

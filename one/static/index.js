@@ -45,7 +45,7 @@ const selectedCategory = document.querySelector('input[name="report-reason"]:che
     formData.append('image', imageInput.files[0]); // Use files[0] to get the file object
   }
 
-  fetch(' http://127.0.0.1:5000/user', {
+  fetch('/user', {
     method: 'POST',
     body: formData
   })

@@ -1,6 +1,6 @@
 // Function to fetch data from the API and populate the table
 async function populateTable() {
-  const apiUrl = 'http://127.0.0.1:5000/staff2';  // Replace with your actual API URL
+  const apiUrl = '/staff2';  // Replace with your actual API URL
 
   try {
       // Fetch the data from the API
@@ -228,7 +228,7 @@ function handleLogout() {
     confirmButton.onclick = () => {
         modal.style.display = 'none';
         // Redirect to the login page
-        window.location.href = 'http://127.0.0.1:5000/staff_login'; // Replace with the actual login page URL
+        window.location.href = '/staff_login'; // Replace with the actual login page URL
     };
 
     // Cancel Logout

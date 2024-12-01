@@ -44,8 +44,14 @@ async function populateTable() {
           const statusCell = document.createElement('td');
           const statusDiv = document.createElement('div');
           statusDiv.textContent = item.status; // Default to 'Unresolved'
-          statusCell.value = 'unresolved'
-          statusDiv.classList.add('status-cell');
+          statusCell.value = item.status;
+          //Status cell colours
+          if(item.status=='resolved'){
+            statusDiv.classList.add('resolved');
+          }
+          else{
+            statusDiv.classList.add('status-cell');
+          }
           statusCell.appendChild(statusDiv);
 
           // View More button
@@ -92,6 +98,7 @@ function showDetails(item, statusDiv) {
       
         <p><strong>No.</strong> ${item.id}</p>
         <p><strong>Complaint ID:</strong> ${item.complaint_id} </p>
+        <p><strong>Time:</strong> ${item.date} </p>
         <p><strong>Name:</strong> ${item.name}</p>
         <p><strong>Email:</strong> ${item.email}</p>
         <p><strong>Telephone:</strong> ${item.telephone}</p>
@@ -144,8 +151,8 @@ function showDetails(item, statusDiv) {
           // Handle the success response
           const result = await response.json(); // Parse the response if needed
   
-          // Update the UI after a successful response
-          statusDiv.textContent = 'Resolved'; // Update status in the table
+          // Update the complaint status in the table
+          statusDiv.textContent = 'Resolved'; // Update the status text
           statusDiv.style.border = '2px solid green';
           statusDiv.style.color = 'green';
   

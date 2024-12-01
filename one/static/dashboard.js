@@ -44,9 +44,16 @@ async function populateTable() {
             // Status column
             const statusCell = document.createElement('td');
             const statusDiv = document.createElement('div');
-            statusDiv.textContent = item.status; // Default to 'Unresolved'
-            statusCell.value = 'unresolved'
+            statusDiv.textContent = item.status;
+
+            statusCell.value = item.status;
             statusDiv.classList.add('status-cell');
+            if(item.status=='resolved'){
+                statusDiv.classList.add('resolved');
+            }
+            else{
+                statusDiv.classList.add('status-cell');
+            }
             statusCell.appendChild(statusDiv);
   
             // View More button
@@ -79,7 +86,7 @@ async function populateTable() {
     } catch (error) {
         console.error('Error populating the table:', error);
     }
-  }
+}
   
   // Function to show detailed information about a complaint
   function showDetails(item, statusDiv) {
@@ -93,6 +100,7 @@ async function populateTable() {
         
           <p><strong>No.</strong> ${item.id}</p>
           <p><strong>Complaint ID:</strong> ${item.complaint_id} </p>
+          <p><strong>Time:</strong> ${item.date} </p>
           <p><strong>Name:</strong> ${item.name}</p>
           <p><strong>Email:</strong> ${item.email}</p>
           <p><strong>Telephone:</strong> ${item.telephone}</p>
@@ -145,7 +153,7 @@ async function populateTable() {
             
     
             // Update the UI after a successful response
-            statusDiv.textContent = 'Resolved'; // Update status in the table
+            statusDiv.textContent = 'Resolved';
             statusDiv.style.border = '2px solid green';
             statusDiv.style.color = 'green';
     
@@ -224,10 +232,6 @@ async function populateTable() {
 
           window.location.href ='http://127.0.0.1:5000/staff_login'; // Replace with the actual login page URL
           }}
-
-          window.location.href = 'http://127.0.0.1:5000/staff_login'; // Replace with the actual login page URL
-      };
-  
       // Cancel Logout
       cancelButton.onclick = () => {
           modal.style.display = 'none';
@@ -240,7 +244,7 @@ async function populateTable() {
               modal.style.display = 'none';
           }
       };
-  }
+
   
   
   

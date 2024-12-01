@@ -12,99 +12,105 @@
 <body>
     <!--Form-->
     <form action="#"class="complaint-form" id="complaint-form">
-        <!--Heading-->
-        <div class="heading">
-            <h2>Issue Report Form</h2>
-        </div>
-        <!--Customer Info-->
-        <div class="info">
-            <div class="info-detail">
-                <label for="name"> Full Name: *</label>
-                <input type="text" id="name">
+        <div class="form-content">
+            <!--Heading-->
+            <div class="heading">
+                <h2>Issue Report Form</h2>
             </div>
-            <div class="info-detail">
-                <label for="email">Email: *</label>
-                <input type="email" id="email" oninput="validateEmail()">
-                <div id="emailError" class="error-bubble" hidden> Please enter a valid email address.</div>
-            </div>
-            <div class="info-detail">
-                <label for="telephone">Telephone Number: *</label>
-                <input type="text" id="telephone" placeholder="+233">
-            </div>
-        </div>
-        <!--COmplaint-->
-        <h4>Reason for reporting this issue? * <span class="info-icon" aria-label="More info" role="img"><i class="fas fa-info-circle"></i></span></h4>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <!--Complaint category-->
-        <div class="report-option">
-            <div class="radio-option">
-                <label for="transaction">Transaction issue
-                    <input type="radio" id="transaction" class="report-reason" value="transaction issue" name="report-reason"> 
-                </label>
-            </div>
-            <div class="radio-option">
-                <label for="account">Account management issue
-                    <input type="radio" id="account" class="report-reason" value="account management issue" name="report-reason">
-                </label>
-            </div>
-            <div class="radio-option">
-                <label for="security">Security issue
-                    <input type="radio" id="security" class="report-reason" value="performance" name="report-reason">
-                </label>
-            </div>
-            <div class="radio-option">
-                <label for="performance">Performance issue
-                    <input type="radio" id="performance" class="report-reason" value="error " name="report-reason">
-                </label>
-            </div>
-            <div class="radio-option">
-                <label for="error">Crash/Error
-                    <input type="radio" id="error" class="report-reason" value="error " name="report-reason">
-                </label>
-            </div>
-        </div>
-        <!--comment area-->
-        <h4>Please give clarity on the issue. Help us understand * <br>
-            <h7 class="explanation">Please provide a detailed description of the issue and any relevant information we would need to resolve it</h7>
-        </h4>
-        <textarea id="complaint" placeholder="  Describe the issue in detail...." oninput="countWords(this)"></textarea>
-        <p class="word-count" id="wordCount">words:  </p>
-        <!--Script to count the words-->
-        <script>
-            function countWords(){
-                const textarea = document.getElementById('complaint');
-                const text = textarea.value.trim();
+            <!--Customer Info-->
+            <div class="info">
+                <div class="info-detail">
+                    <label for="name"> Full Name: *</label>
+                    <input type="text" id="name">
+                </div>
 
-                //split the text by spaces and filter out any empty strings
-                const words = text.split(/\s+/).filter(word=>word.length>0);
-                const wordCount = words.length;
-                const wordLimit =500;
-                //update the word count display
-                const wordCountDisplay = document.getElementById('wordCount');
-                wordCountDisplay.innerText = `Words: ${wordCount} / ${wordLimit}`;
-                //prevent further typing if the word count exceeds the limit
-                if(wordCount > wordLimit){
-                    //trim to 1000 words
-                    textarea.value = words.slice(0,wordLimit).join('');
+                <div class="info-detail">
+                    <label for="email">Email: *</label>
+                    <input type="email" id="email" oninput="validateEmail()">
+                    <div id="emailError" class="error-bubble" hidden> Please enter a valid email address.</div>
+                </div>
+
+                <div class="info-detail">
+                    <label for="telephone">Telephone Number: *</label>
+                    <input type="text" id="telephone" placeholder="+233">
+                </div>
+            </div>
+            <!--COmplaint-->
+            <h4>Reason for reporting this issue? * <span class="info-icon" aria-label="More info" role="img"><i class="fas fa-info-circle"></i></span></h4>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+            <!--Complaint category-->
+            <div class="report-option">
+                <div class="radio-option">
+                    <label for="transaction">Transaction issue
+                        <input type="radio" id="transaction" class="report-reason" value="transaction issue" name="report-reason"> 
+                    </label>
+                </div>
+                <div class="radio-option">
+                    <label for="account">Account management issue
+                        <input type="radio" id="account" class="report-reason" value="account management issue" name="report-reason">
+                    </label>
+                </div>
+                <div class="radio-option">
+                    <label for="security">Security issue
+                        <input type="radio" id="security" class="report-reason" value="security issue" name="report-reason">
+                    </label>
+                </div>
+                <div class="radio-option">
+                    <label for="performance">Performance issue
+                        <input type="radio" id="performance" class="report-reason" value="perfomance management issue" name="report-reason">
+                    </label>
+                </div>
+                <div class="radio-option">
+                    <label for="crash">Crash/Error
+                        <input type="radio" id="crash" class="report-reason" value="crash issue" name="report-reason">
+                    </label>
+                </div>
+            </div>
+        
+            <!--comment area-->
+            <h4>Please give clarity on the issue. Help us understand * <br>
+                <h7 class="explanation">Please provide a detailed description of the issue and any relevant information we would need to resolve it</h7>
+            </h4>
+            <textarea id="complaint" placeholder="  Describe the issue in detail...." oninput="countWords(this)"></textarea>
+            <p class="word-count" id="wordCount">words:  </p>
+            <!--Script to count the words-->
+            <script>
+                function countWords(){
+                    const textarea = document.getElementById('complaint');
+                    const text = textarea.value.trim();
+
+                 //split the text by spaces and filter out any empty strings
+                    const words = text.split(/\s+/).filter(word=>word.length>0);
+                    const wordCount = words.length;
+                    const wordLimit =500;
+                    //update the word count display
+                    const wordCountDisplay = document.getElementById('wordCount');
+                    wordCountDisplay.innerText = `Words: ${wordCount} / ${wordLimit}`;
+                    //prevent further typing if the word count exceeds the limit
+                    if(wordCount > wordLimit){
+                        //trim to 1000 words
+                        textarea.value = words.slice(0,wordLimit).join('');
+                    }
                 }
-            }
-        </script>
-        <br>
-        <!--Insert images-->
-        <br>
-        <div class="container">
-            <p>Attach an image (if any) to help us understand the issue better</p>
-            <input type="file" id="image-upload" accept="image/*" hidden>
+            </script>
+            <br>
+            <!--Insert images-->
+            <br>
+            <div class="container">
+                <p>Attach an image (if any) to help us understand the issue better</p>
+                <input type="file" id="image-upload" accept="image/*" hidden>
+            </div>
             <div class="img-area" data-img="">
                 <i class='bx bxs-cloud-upload icon'></i>
                 <h3>Upload Image</h3>
                 <p>Image size must be less than <span>2MB</span></p>
             </div>
             <button class="select-image">Select Image</button>
-        </div>
-        <!--submit button-->
-        <div class="submit-button">
-            <input type="submit" id="submit" onclick="validateForm()"></input>
+        
+            <!--submit button-->
+            <div class="submit-button">
+                <input type="submit" id="submit"></input>
+            </div>
         </div>
     
     </form> 

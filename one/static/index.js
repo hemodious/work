@@ -1,5 +1,6 @@
 //form validation
-function validateForm(){
+document.querySelector('form').addEventListener('submit', function(event){
+  event.preventDefault();
 const nameinput = document.getElementById('name').value.trim();
 const emailInput = document.getElementById('email').value.trim();
 const telephoneInput = document.getElementById('telephone').value.trim();
@@ -29,7 +30,7 @@ const selectedCategory = document.querySelector('input[name="report-reason"]:che
     return false;
   }
   
-    alert('Success')
+    
   const formData = new FormData(); // Corrected here
   formData.append('name', document.getElementById('name').value);
   formData.append('telephone', document.getElementById('telephone').value);
@@ -49,43 +50,19 @@ const selectedCategory = document.querySelector('input[name="report-reason"]:che
     body: formData
   })
   .then(response => {
+    console.log(response)
+    window.location.href = response.url;
+    alert('Success')
     if (!response.ok) {
       throw new Error('Network response was not ok ' + response.statusText);
     }
     return response.json();
   })
-  .then(data => {
-    
-    window.location.href = '/success'; // Relative path to the success page
-    
-    document.getElementById('response').innerText = 'Success: ' + JSON.stringify(data);
-   
-  })
+  
   .catch((error) => {
     console.error('Error:', error);
-    document.getElementById('response').innerText = 'Error: ' + error;
-  });
- 
-  fetch(' http://127.0.0.1:5000/user', {
-    method: ' GET',
-    body: formData
   })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
-    }
-    return response.json();
-  })
-  .then(data => {
-    
-    localStorage .setItem('complaint_id', data.complaint_id)
-   
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-    document.getElementById('response').innerText = 'Error: ' + error;
-  });
-};
+});
 
 //Email validation
 function validateEmail() {
@@ -123,8 +100,9 @@ const selectImage = document.querySelector('.select-image');
 const inputFile = document.querySelector('#image-upload');
 const imgArea = document.querySelector('.img-area');
 
-selectImage.addEventListener('click', function () {
+selectImage.addEventListener('click', function (event) {
 	inputFile.click();
+  event.preventDefault();
 })
 
 inputFile.addEventListener('change', function () {

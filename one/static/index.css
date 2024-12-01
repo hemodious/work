@@ -36,7 +36,6 @@ body{
 }
 .info {
     display: flex;
-    flex-wrap: wrap;
     gap: 10px;
     justify-content: space-between;
     width: 100%; /* Ensure it takes full width */

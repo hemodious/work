@@ -36,17 +36,25 @@ body{
 }
 .info {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     justify-content: space-between;
-    width: 100%; /* Ensure it takes full width */
+    align-items: center;
+    max-width: 100%; /* Ensure it takes full width */
     margin-bottom: 10px; /* Add margin to separate from other elements */
 }
 .info .info-detail {
     padding: 10px 0; /* Adjust padding */
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .info .info-detail input {
     margin-top: 5px; /* Reduced margin */
-    border-radius: 2px;
+    border-radius: 5px;
+    padding-left: 5px;
     height: 25px;
     width: 200px;
     border: 2px solid #01579b;
@@ -56,6 +64,7 @@ body{
 .info .info-detail input::placeholder{
     font-size: 12px;
 }
+
 .report-option {
     display: flex;
     flex-wrap: wrap;

@@ -1,8 +1,13 @@
 from flask import Blueprint,send_file ,request,jsonify,render_template,redirect,url_for, session, flash
 from my_module import db_connection
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import  MIMEText
+from my_module import MailToClient
+from my_module import MailTOStaff
+from my_module import successmail
+from my_module import get_image_data
+from my_module import verifyEmail,verifyPassword
+from variables import staff2,staff1
+from queries import newUser
+from queries.newUser import UserQuery
 import random
 import string
 import datetime
@@ -11,20 +16,6 @@ from PIL import Image
 
 # blueprint to organise my routes or endpoints
 api = Blueprint('api', __name__)
-
-#function to get the image from the database
-def get_image_data(image_id):
-    conn = db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT image FROM user WHERE id = ?", (image_id,))
-    row = cursor.fetchone()
-    conn.close()
-    
-    if row:
-        return row[0]  # Assuming image data is in the first column
-    return None
-
-
 
 @api.route('/download/<int:image_id>')
 # function to convert into downloadable format
@@ -54,16 +45,10 @@ def download(image_id):
 
 @api.route('/user',methods=['GET','POST'])#route to  get all user data/ create  new user
 def user():
-    conn=db_connection()#opening the database connection
-    cursor=conn.cursor()
+    
     if request.method == 'GET':
-        cursor= conn.execute("SELECT * FROM user")#querying the table to get all user data
-        users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"/download/{row[0]}",complaint_id=row[9],status=row[10])
-            for row in cursor.fetchall()
-        ]#store  the data in a list of dictionaries
-        if users is not None:# checking if the data is not empty
-            return jsonify(users)
+       data=UserQuery.queryforall()
+       return jsonify(data)
         
     if request.method == 'POST':# if the request is post then we will create a new user
 # variables to  store the data from the request
@@ -83,8 +68,8 @@ def user():
         characters=string.ascii_letters+ string.digits*4
         ans=''.join(random.choices(characters, k=7) )
         store=[] 
-        for good in store:
-         if good == ans :
+        for goods in store:
+         if goods == ans :
             return("already exists")
          else:
             store.append(ans)  
@@ -92,54 +77,11 @@ def user():
         new_complaint_id=ans
         update_status="unresolved"
         #inserting the data into the table
-        sql="""INSERT INTO user (name,telephone,complaint,email,category,image,complaint_id,status)
-        VALUES (?,?,?,?,?,?,?,?)"""
-        # executing the query
-        cursor=cursor.execute(sql,(new_name,new_telephone,new_complaint,new_email,new_category,image_data,new_complaint_id,update_status))
-        conn.commit()
-        conn.close()
+        UserQuery.createNewUser(new_name,new_telephone,new_complaint,new_email,new_category,image_data,new_complaint_id,update_status)
         #code to send  email to clients
-        server=smtplib.SMTP('smtp.gmail.com',587)
-        server.starttls()
-        server.login("moorleinternship@gmail.com","kocqukrajdvftmyb")
-        msg=MIMEMultipart()
-        msg['From']="moorleinternship@gmail.com"
-        msg['To']=new_email
-        msg['Subject']="COMPLAINT"
-        #body of message to user
-        body=f"Dear {new_name} ,\n\nyour complaint in category {new_category.upper()} has been recieved your complaint ID is {new_complaint_id} ,our staff will contact you soon\n \nThank you "
-        msg.attach(MIMEText(body,'plain'))
-        server.sendmail("moorleinternship@gmail.com",new_email,msg.as_string())
-        server.quit()#closing the server
+        MailToClient(new_email,new_category,new_name,new_complaint_id)
      #code to send mail to staff
-        server2=smtplib.SMTP('smtp.gmail.com',587)
-        server2.starttls()
-        server2.login("moorleinternship@gmail.com","kocqukrajdvftmyb")
-        #email to staff1
-        msg=MIMEMultipart()
-        msg['From']="moorleinternship@gmail.com"
-        msg['To']="affoh.emmanuel.ea@gmail.com"
-        msg['Subject']="NEW REPORT"
-        #email to staff2
-        msg2=MIMEMultipart()
-        msg2['From']="moorleinternship@gmail.com"
-        msg2['To']="michaelopoku790@gmail.com"
-        msg2['Subject']="NEW REPORT"
-        body1=f"Dear Emmanuel ,\n\n{new_name},with id \033{new_complaint_id} has  submitted a complaint in \033 category  {new_category.upper()}  ,please contact him/her soon\n\n thank you "
-        body2=f"Dear Michael ,\n\n{new_name}, with id \033{new_complaint_id} has  submitted a complaint in \033category {new_category.upper()} ,please contact him/her soon\n\n thank you "
-        #a list issues staff one should handle
-        checker=["transaction issue","account management issue","security issues"]
-        #checking if the complaint is in the list of issues staff1  should handle
-        for check in checker:
-            if new_category==check:
-                msg.attach(MIMEText(body1,'plain'))
-                server2.sendmail("moorleinternship@gmail.com","affoh.emmanuel.ea@gmail.com",msg.as_string())#dont forget to change the email
-                break
-            else:#if  the complaint is not in the list of issues staff1 should handle it passes it to  staff2
-                msg2.attach(MIMEText(body2,'plain'))
-                server2.sendmail("moorleinternship@gmail.com","michaelopoku790@gmail.com",msg2.as_string())#dont forget to change the email
-                break
-        server2.quit()
+        MailTOStaff(new_name,new_complaint,new_category)
         return redirect(f'/success?complaintId={new_complaint_id}')
 
    
@@ -148,63 +90,65 @@ def user():
 @api.route('/staff1',methods=['GET'])
 #function to query all complaints belonging to staff1 depending on the category
 def staff1():
-    conn=db_connection()
-    cursor=conn.cursor()
-    issues=('transaction issue','account management issue','security issue')
-    cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?)',issues)
-    users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"/download/{row[0]}",complaint_id=row[9], date=row[11],status=row[10])
-            for row in cursor.fetchall()
-        ]
-    conn.close()
-    return jsonify(users)
+  try:
+   data=UserQuery.queryforstaff1()
+   if data is None:
+       return jsonify({"no data returned from query"})
+   else:
+       return jsonify(data)
     
-
+  except:
+    return jsonify({"error":"An error occurred while fetching user data"})
 
 
 @api.route('/staff2',methods=['GET'])
 #function to query all complaints belonging to staff2 depending on the category
 def staff2():
-    conn=db_connection()
-    cursor=conn.cursor()
-    issues=('crash issue','perfomance management issue','others')
-    cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?)',issues)
-    users=[
-            dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"/download/{row[0]}",complaint_id=row[9], date=row[11],status=row[10] )
-            for row in cursor.fetchall()
-        ]
-    return jsonify(users)
-
-
-
+    try:
+        data=UserQuery.queryforstaff2()
+        if data is None:
+            return jsonify({"error": "No data returned from query"})
+        return jsonify(data)
+    except:
+        return jsonify({"error":"An error occurred while fetching user data"})
+    
+    
 
 @api.route('/login', methods=['POST'])
 #function to login a user
 def login():
     user_email = request.form['email']
     user_password = request.form['password']
-    
+    try:
+       user= verifyEmail(user_email)
+       password= verifyPassword(user_email)
+      
+    except:
+        return jsonify({"error":"Invalid email or password"})
     # Authentication logic
-    if user_email == "affoh.emmanuel.ea@gmail.com" and user_password == "password":
-        session['logged_in'] = True  # Set logged in session
-        session['user_email'] = user_email
-        return jsonify({
+    if user ==staff1 and user_password == password:
+        try:
+            session['logged_in'] = True  # Set logged in session
+            session['user_email'] = user_email
+            return jsonify({
             "message": "Login successful",
             "redirectUrl": url_for('api.dashboard1')  # Redirect to dashboard1
-        }), 200
-    elif user_email == "michaelopoku790@gmail.com" and user_password == "password":
-        session['logged_in'] = True  # Set logged in session
-        session['user_email'] = user_email
-        return jsonify({
+         }), 200
+        except:
+            print("error loading page")
+    elif user== staff2 and user_password==password:
+            session['logged_in'] = True  # Set logged in sessionn
+            session['user_email'] = user
+            return jsonify({
             "message": "Login successful",
-            "redirectUrl": url_for('api.dashboard2')  # Redirect to dashboard2
-        }), 200
-    else:
-        return jsonify({
-            "message": "Invalid credentials",
-        }), 401
-    
+            "redirectUrl": url_for('api.dashboard2')  # Redirect to dashboard1
+         }), 200
 
+    else:
+            return jsonify({
+            "message": "Invalid credentials",
+            }), 401
+    
 
 
 @api.route('/dashboard1', methods=['GET'])
@@ -233,40 +177,6 @@ def logout():
     session.pop('logged_in', None)  # Remove logged in session
     session.pop('user_email', None)  # Remove user email from session
     return redirect(url_for('api.staff_login'))  # Redirect to login page
-
-
-
-
-        
-@api.route('/chatlogin',methods=['GET'])#sends the staff to the chatroomlogin page
-def chatlogin():
-    return render_template('chatlogin.html')
-
-
-
-@api.route('/chatroom',methods=['GET'])
-#function to display the chatroom page
-def chatroom():
-    return render_template('chatroom.html')
-
-
-@api.route('/chatroom_messages', methods=['GET'])
-#function to display the chatroom messages
-def get_chat_messages():
-    conn = db_connection()
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT username, message, timestamp 
-        FROM chat_messages 
-        ORDER BY timestamp DESC 
-        LIMIT 50
-    """)
-    messages = [
-        {'username': row[0], 'message': row[1], 'timestamp': row[2]}
-        for row in cursor.fetchall()
-    ]
-    conn.close()
-    return jsonify(messages)
 
 
 
@@ -305,29 +215,7 @@ def update_status():
 # 
 #sends a mail to the customer if the status 
     if new_status =="resolved":
-        conn = db_connection()  # Open the database connection
-        cursor = conn.cursor()
-        email_query="SELECT email FROM user WHERE complaint_id = ?"
-        cursor.execute(email_query, (complaint_id,))
-        email = cursor.fetchone()[0]
-        print(email)
-        server=smtplib.SMTP('smtp.gmail.com',587)
-        server.starttls()
-        server.login("moorleinternship@gmail.com","kocqukrajdvftmyb")
-        msg=MIMEMultipart()
-        msg['From']="moorleinternship@gmail.com"
-        msg['To']=email
-        msg['Subject']="COMPLAINT RESOLVED"
-
-        #body of message to user
-        body=f"Dear Customer ,\n\n {complaint_id} ,your complaint has been resolved\n \nThank you "
-        msg.attach(MIMEText(body,'plain'))
-        try:
-            server.sendmail("moorleinternship@gmail.com",email,msg.as_string())
-        except Exception as e:
-            print(f"Error sending email: {e}")
-        server.quit()#closing the server
-        conn.close()  
+        successmail(complaint_id)
     return jsonify({"message": "Status updated successfully", "updated_at": current_time.isoformat()}), 200
 
 

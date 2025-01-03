@@ -8,6 +8,7 @@ import string
 import datetime
 from io import BytesIO
 from PIL import Image
+import validators
 
 # blueprint to organise my routes or endpoints
 api = Blueprint('api', __name__)
@@ -16,7 +17,7 @@ api = Blueprint('api', __name__)
 def get_image_data(image_id):
     conn = db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT image FROM user WHERE id = ?", (image_id,))
+    cursor.execute("SELECT image FROM user WHERE id = ?",(image_id,))
     row = cursor.fetchone()
     conn.close()
     
@@ -148,16 +149,39 @@ def user():
 @api.route('/staff1',methods=['GET'])
 #function to query all complaints belonging to staff1 depending on the category
 def staff1():
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int) 
+    offset = (page - 1) * per_page 
     conn=db_connection()
     cursor=conn.cursor()
     issues=('transaction issue','account management issue','security issue')
-    cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?)',issues)
+    cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?) LIMIT ? OFFSET ?',(*issues,per_page,offset))
     users=[
             dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"/download/{row[0]}",complaint_id=row[9], date=row[11],status=row[10])
             for row in cursor.fetchall()
         ]
+   
+    cursor.execute('''
+        SELECT COUNT(*) FROM user 
+        WHERE category IN (?, ?, ?)
+    ''', issues)
+    total = cursor.fetchone()[0]
+
     conn.close()
-    return jsonify(users)
+    total_pages=(total // per_page) + (1 if total % per_page > 0 else 0)
+    # Prepare the response with pagination metadata
+    response = {
+        'users': users,
+        'pagination': {
+            'total': total,
+            'page': page,
+            'pages': total_pages,
+            'per_page': per_page,
+            'next_page': f"/staff1?page={page + 1}&per_page={per_page}" if page < total_pages else None,
+            'prev_page': f"/staff1?page={page - 1}&per_page={per_page}" if page > 1 else None,
+        }
+    }
+    return jsonify(response)
     
 
 
@@ -165,15 +189,34 @@ def staff1():
 @api.route('/staff2',methods=['GET'])
 #function to query all complaints belonging to staff2 depending on the category
 def staff2():
+    page =request.args.get('page',1,type=int)
+    per_page= request.args.get('per_page',10,type=int)
+    offset = (page - 1) * per_page
     conn=db_connection()
     cursor=conn.cursor()
     issues=('crash issue','perfomance management issue','others')
-    cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?)',issues)
+    cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?) LIMIT ? OFFSET ?',(*issues,per_page,offset))
     users=[
             dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"/download/{row[0]}",complaint_id=row[9], date=row[11],status=row[10] )
             for row in cursor.fetchall()
         ]
-    return jsonify(users)
+    cursor.execute('SELECT COUNT(*) FROM user WHERE category IN (?,?,?)',issues)
+    total = cursor.fetchone()[0]
+    conn.close()
+    total_pages=(total // per_page) + (1 if total % per_page > 0 else 0)
+    
+    response ={
+        'users': users,
+        'pagination': {
+            'total': total,
+            'page': page,
+            'pages': total_pages,
+            'per_page': per_page,
+            'next_page': f"/staff2?page={page + 1}&per_page={per_page}" if page < total_pages else None,
+            'prev_page': f"/staff2?page={page - 1}&per_page={per_page}" if page > 1 else None,
+    }
+    }
+    return jsonify(response)
 
 
 

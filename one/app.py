@@ -1,13 +1,15 @@
 import os
 from flask_socketio import SocketIO, send, emit
 from flask_cors import CORS
-from my_module import db_connection
+from my_module import db_connection, db
 from flask import Flask, request
 from endpoints import api
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key'  # Add a secret key
 CORS(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///user.sqlite'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.register_blueprint(api)
 socketio = SocketIO(app, cors_allowed_origins="*")

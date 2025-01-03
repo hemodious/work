@@ -9,7 +9,7 @@ import datetime
 from io import BytesIO
 from PIL import Image
 import validators
-
+from src.constants.vars import *
 # blueprint to organise my routes or endpoints
 api = Blueprint('api', __name__)
 
@@ -280,37 +280,6 @@ def logout():
 
 
 
-        
-@api.route('/chatlogin',methods=['GET'])#sends the staff to the chatroomlogin page
-def chatlogin():
-    return render_template('chatlogin.html')
-
-
-
-@api.route('/chatroom',methods=['GET'])
-#function to display the chatroom page
-def chatroom():
-    return render_template('chatroom.html')
-
-
-@api.route('/chatroom_messages', methods=['GET'])
-#function to display the chatroom messages
-def get_chat_messages():
-    conn = db_connection()
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT username, message, timestamp 
-        FROM chat_messages 
-        ORDER BY timestamp DESC 
-        LIMIT 50
-    """)
-    messages = [
-        {'username': row[0], 'message': row[1], 'timestamp': row[2]}
-        for row in cursor.fetchall()
-    ]
-    conn.close()
-    return jsonify(messages)
-
 
 
 
@@ -347,7 +316,7 @@ def update_status():
     conn.close()   # Close the connection
 # 
 #sends a mail to the customer if the status 
-    if new_status =="resolved":
+    if new_status ==valid:
         conn = db_connection()  # Open the database connection
         cursor = conn.cursor()
         email_query="SELECT email FROM user WHERE complaint_id = ?"

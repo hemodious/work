@@ -1,8 +1,5 @@
 import sqlite3
-from flask_sqlalchemy import SQLAlchemy
 
-
-db= SQLAlchemy()
 def db_connection():
     conn =None
     try:

@@ -9,7 +9,7 @@ import datetime
 from io import BytesIO
 from PIL import Image
 import validators
-from src.constants.vars import *
+from constants.vars import *
 # blueprint to organise my routes or endpoints
 api = Blueprint('api', __name__)
 
@@ -194,7 +194,7 @@ def staff2():
     offset = (page - 1) * per_page
     conn=db_connection()
     cursor=conn.cursor()
-    issues=('crash issue','perfomance management issue','others')
+    
     cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?) LIMIT ? OFFSET ?',(*issues,per_page,offset))
     users=[
             dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"/download/{row[0]}",complaint_id=row[9], date=row[11],status=row[10] )

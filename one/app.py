@@ -1,9 +1,9 @@
 import os
 from flask_socketio import SocketIO, send, emit
 from flask_cors import CORS
-from src.my_module import db_connection, db
+from my_module import db_connection
 from flask import Flask, request
-from src.endpoints import api
+from endpoints import api
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key'  # Add a secret key

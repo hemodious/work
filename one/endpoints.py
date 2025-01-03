@@ -1,5 +1,5 @@
 from flask import Blueprint,send_file ,request,jsonify,render_template,redirect,url_for, session, flash
-from my_module import db_connection
+from src.my_module import db_connection
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import  MIMEText

@@ -3,11 +3,12 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import  MIMEText
 from flask import jsonify
+from werkzeug.security import generate_password_hash,check_password_hash
 
 def db_connection():
     conn =None
     try:
-        conn = sqlite3.connect('user.sqlite')
+        conn = sqlite3.connect('User.db')
     except sqlite3.error as e:
         print(e)
     return conn
@@ -15,7 +16,7 @@ def db_connection():
 def staff_connection():
     conn =None
     try:
-        conn = sqlite3.connect('Staff.db')
+        conn = sqlite3.connect('staff.db')
     except sqlite3.error as e:
         print(e)
     return conn
@@ -113,7 +114,7 @@ def verifyEmail(email):
     try:
         conn = staff_connection()  # Open the database connection
         cursor = conn.cursor()
-        email_query="SELECT email FROM Staff WHERE email = ?"
+        email_query="SELECT email FROM staff WHERE email = ?"
         cursor.execute(email_query, (email,))
         fin = cursor.fetchone()[0]
         if fin is None:
@@ -124,17 +125,19 @@ def verifyEmail(email):
     except:
         return jsonify({"error":"error verifying email"})
     
-def verifyPassword(email):
+def verifyPassword(password):
     try:
         conn = staff_connection()  # Open the database connection
         cursor = conn.cursor()
-        email_query="SELECT password FROM Staff WHERE email = ?"
-        cursor.execute(email_query, (email,))
+        email_query="SELECT password FROM staff WHERE password = ?"
+        cursor.execute(email_query, (password,))
         fin = cursor.fetchone()[0]
         if fin is None:
             return {"invalid password"}
 
+        check_password_hash(fin,password)
         return fin
 
     except:
         return {"error":"error verifying password"}
+   

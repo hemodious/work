@@ -5,10 +5,12 @@ from email.mime.text import  MIMEText
 from flask import jsonify
 from werkzeug.security import generate_password_hash,check_password_hash
 
+
 def db_connection():
     conn =None
     try:
         conn = sqlite3.connect('user.sqlite')
+        conn.row_factory = sqlite3.Row 
     except sqlite3.error as e:
         print(e)
     return conn

@@ -8,11 +8,13 @@ def staff1():
 
 @staff.route('/staff2',methods=['GET'])
 def staff2():
-    Staff_services.query_for_staff_2()
+    data=Staff_services.query_for_staff_2()
+    return data
 
 @staff.route('/login', methods=['POST'])
 def login():
-    Staff_services.login()
+    data=Staff_services.login()
+    return data
 
 @staff.route('/register_staff',methods=['POST'])
 def register_staff():
@@ -20,17 +22,22 @@ def register_staff():
     return data
 @staff.route('/logout')
 def logout():
-    Staff_services.logout()
+    data=Staff_services.logout()
+    return data
+
 
 @staff.route('/dashboard1', methods=['GET'])
 def dashboard1():
-    Staff_services.dashboard1()
+    data=Staff_services.dashboard1()
+    return data
 
 @staff.route('/dashboard2', methods=['GET'])
 def dashboard2():
-    Staff_services.dashboard2()
+    data=Staff_services.dashboard2()
+    return data
 
 @staff.route('/staff_login',methods=['GET'])
 def staff_login():
-    Staff_services.staff_login()
+    data=Staff_services.staff_login()
+    return data
     

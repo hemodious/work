@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 def db_connection():
     conn =None
     try:
-        conn = sqlite3.connect('User.db')
+        conn = sqlite3.connect('user.sqlite')
     except sqlite3.error as e:
         print(e)
     return conn

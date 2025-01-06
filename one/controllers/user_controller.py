@@ -1,5 +1,4 @@
 from queries.newUser import UserQuery
-from flask import Flask, request
 from services.user_services import *
 class user_controller:
     def __init__(self):

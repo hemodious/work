@@ -1,12 +1,15 @@
+
+
 import sqlite3
 def init_db():
-    conn = sqlite3.connect('chat.db')
+    conn = sqlite3.connect('staff.db')
     cursor = conn.cursor()
     cursor.execute('''
-            CREATE TABLE IF NOT EXISTS chat_messages (
+            CREATE TABLE IF NOT EXISTS staff (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT NOT NULL,
-                message TEXT NOT NULL
+                email TEXT NOT NULL,
+                password TEXT NOT NULL
             )
         ''')
     

@@ -4,7 +4,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import  MIMEText
 from flask import jsonify
 from werkzeug.security import generate_password_hash,check_password_hash
-
+from constants.vars import *
 
 def db_connection():
     conn =None

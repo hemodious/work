@@ -1,8 +1,10 @@
 from flask import request,session,url_for,redirect,render_template,jsonify
 from my_module import *
 from werkzeug.security import generate_password_hash
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity,create_refresh_token
 import validators
 from queries.newUser import *
+from constants.vars import *
 class Staff_services:
     def register_staff():
             
@@ -17,7 +19,7 @@ class Staff_services:
         conn=staff_connection()
         cursor=conn.cursor()
         staff_auth=cursor.execute('SELECT email FROM staff WHERE email= ?',(email,)).fetchone()
-        print(staff_auth)
+        staff_auth
         if staff_auth:
             return jsonify({
                 "message":"user alrready exists"
@@ -44,14 +46,43 @@ class Staff_services:
         
         if validators.email(user_email):
             if user and password:
+                    user=UserQuery.get_staff(user_email)
+                    user_data={
+                        "id":user["id"],
+                        "name":user["name"],
+                        "email":user["email"],
+                    }
+                    print(user)
+                    access_token = create_access_token(identity=(str(user["id"])))
+                    refresh_token= create_refresh_token(identity=(str(user["id"])))
                     session['logged_in'] = True  # Set logged in session
                     session['user_email'] = user_email
-                    return jsonify({
-                    "message": "Login successful",
-                    "redirectUrl": url_for('staff.dashboard1')  # Redirect to dashboard1
-            }), 200
+                    
+                    if user["email"]== staff_1:
+                        return jsonify({
+                        "message": "Login successful",
+                        "redirectUrl": url_for('staff.dashboard1'),
+                        "access_token": access_token,
+                        "refresh_token": refresh_token,
+                        "user_data": user_data
+                    }), 200
+
+                    elif user["email"]== staff_2:
+                        return jsonify({
+                            "message": "Login successful",
+                            "redirectUrl": url_for('staff.dashboard2'),
+                            "access_token": access_token,
+                            "refresh_token": refresh_token,
+                            "user_data": user_data
+                        }), 200
+
+                    else:
+                        return jsonify({"message": "Invalid staff"}), 401
+                
+            
+                
             else:
-                    return jsonify({
+                return jsonify({
                         "message": "Login unsuccessful,wrong password",
                     })
     def query_for_staff_1():

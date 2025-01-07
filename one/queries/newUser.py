@@ -1,4 +1,4 @@
-from my_module import db_connection
+from my_module import db_connection,staff_connection
 from flask import jsonify,request
 from constants.vars import *
 import sqlite3
@@ -60,7 +60,7 @@ class UserQuery:
                      return jsonify({"message": "No users found"}), 404
             except sqlite3.Error as e:
                  return jsonify({"message": "Database query failed"}), 500
-            print (users)
+           
             cursor.execute('''
                 SELECT COUNT(*) FROM user 
                 WHERE category IN (?, ?, ?)
@@ -81,7 +81,6 @@ class UserQuery:
                     'prev_page': f"/staff1?page={page - 1}&per_page={per_page}" if page > 1 else None,
                 }
             }
-            print(users)
             return response
         except:
                 return jsonify({"error": "An error occurred couldn't query database"}), 500
@@ -112,3 +111,29 @@ class UserQuery:
 
         except:
             return jsonify({"error":"error adding new user"})
+    def get_staff(email):
+       try:
+        conn = staff_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM staff WHERE email=?", (email,))
+        row = cursor.fetchone()
+        
+        if row is not None:
+            staff = {
+                'id': row[0],
+                'name': row[1],
+                'email': row[2],
+                'password': row[3]
+            }
+            return staff
+        else:
+            return None  # No staff found with the given email
+        
+       except Exception as e:
+            return None  # Return None or handle the error as needed
+        
+       finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()

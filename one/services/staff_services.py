@@ -31,8 +31,7 @@ class Staff_services:
             cursor.close()
 
             return jsonify({
-            "message":"successfully added"
-            },hashed_password)
+            "message":"successfully added"}),200
     def login():
         user_email = request.form['email']
         user_password = request.form['password']
@@ -47,17 +46,19 @@ class Staff_services:
         if validators.email(user_email):
             if user and password:
                     user=UserQuery.get_staff(user_email)
+                    if not user:
+                        return jsonify({"error": "user does not exist"}), 401
                     user_data={
                         "id":user["id"],
                         "name":user["name"],
                         "email":user["email"],
                     }
-                    print(user)
+                   
                     access_token = create_access_token(identity=(str(user["id"])))
                     refresh_token= create_refresh_token(identity=(str(user["id"])))
                     session['logged_in'] = True  # Set logged in session
                     session['user_email'] = user_email
-                    
+
                     if user["email"]== staff_1:
                         return jsonify({
                         "message": "Login successful",
@@ -83,7 +84,7 @@ class Staff_services:
                 
             else:
                 return jsonify({
-                        "message": "Login unsuccessful,wrong password",
+                        "message": "Login unsuccessful,wrong password"
                     })
     def query_for_staff_1():
          
@@ -93,7 +94,7 @@ class Staff_services:
                 if data is None:
                     return jsonify({"no data returned from query"})
                 else:
-                    return data
+                    return jsonify(data)
                 
             except:
                 return jsonify({"error":"An error occurred while fetching user data"})
@@ -123,5 +124,5 @@ class Staff_services:
     
     def dashboard2():
         if not session.get('logged_in'):
-            return redirect(url_for('api.staff_login'))  # Redirect to login if not logged in
+            return redirect(url_for('staff.staff_login'))  # Redirect to login if not logged in
         return render_template('dashboard2.html')

@@ -36,7 +36,7 @@ class UserQuery:
                 'prev_page': f"/staff2?page={page - 1}&per_page={per_page}" if page > 1 else None,
         }
         }
-        return (response)
+        return response
 
 
     

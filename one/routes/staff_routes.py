@@ -5,8 +5,12 @@ from constants.HTTP_STATUS_CODES import *
 staff=Blueprint('staff',__name__)
 @staff.route('/staff1',methods=['GET'])
 def staff1():
-    data=Staff_services.query_for_staff_1()
-    return data,HTTP_200_OK
+    try:
+        #fetching complaints for staff1 from database
+        data=Staff_services.query_for_staff_1()
+        return data,HTTP_200_OK
+    except Exception as e:
+        return str(e),HTTP_500_INTERNAL_SERVER_ERROR
 
 @staff.route('/staff2',methods=['GET'])
 def staff2():
@@ -16,7 +20,7 @@ def staff2():
 @staff.route('/login', methods=['POST'])
 def login():
     data=Staff_services.login()
-    return data, HTTP_200_OK
+    return data
 
 @staff.route('/register_staff',methods=['POST'])
 def register_staff():
@@ -33,7 +37,7 @@ def logout():
 def dashboard1():
     current_user = get_jwt_identity()
     data=Staff_services.dashboard1()
-    return data, HTTP_200_OK
+    return jsonify(data) , HTTP_200_OK
 
 @staff.route('/dashboard2', methods=['GET'])
 @jwt_required()

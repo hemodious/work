@@ -9,52 +9,92 @@ def staff1():
         #fetching complaints for staff1 from database
         data=Staff_services.query_for_staff_1()
         return data,HTTP_200_OK
+    
     except Exception as e:
         return str(e),HTTP_500_INTERNAL_SERVER_ERROR
 
 @staff.route('/staff2',methods=['GET'])
 def staff2():
-    data=Staff_services.query_for_staff_2()
-    return data,HTTP_200_OK
+    #fetches complaints for staff2 from the database
+    try:
+        data=Staff_services.query_for_staff_2()
+        return data,HTTP_200_OK
+    
+    except Exception as e:
+        return str(e),HTTP_500_INTERNAL_SERVER_ERROR
+
 
 @staff.route('/login', methods=['POST'])
 def login():
-    data=Staff_services.login()
-    return data
+    #logs staff in 
+    try:
+        data=Staff_services.login()
+        return data
+    
+    except Exception as e:
+        return str(e),HTTP_500_INTERNAL_SERVER_ERROR
 
 @staff.route('/register_staff',methods=['POST'])
 def register_staff():
-    data=Staff_services.register_staff()
-    return data
+    #registers a new staff member
+    try:
+        data=Staff_services.register_staff()
+        return data
+    
+    except Exception as e:
+        return str(e),HTTP_500_INTERNAL_SERVER_ERROR
 @staff.route('/logout')
 def logout():
-    data=Staff_services.logout()
-    return data, HTTP_200_OK
+    try:
+        data=Staff_services.logout()
+        return data, HTTP_200_OK
+    
+    except Exception as e:
+        return str(e),HTTP_500_INTERNAL_SERVER_ERROR
 
 
 @staff.route('/dashboard1', methods=['GET'])
-@jwt_required()
+
 def dashboard1():
-    current_user = get_jwt_identity()
+  try:
+
     data=Staff_services.dashboard1()
     return jsonify(data) , HTTP_200_OK
+  
+  except Exception as e:
+      return str(e),HTTP_500_INTERNAL_SERVER_ERROR
 
 @staff.route('/dashboard2', methods=['GET'])
-@jwt_required()
+
 def dashboard2():
-    current_user = get_jwt_identity()
-    data=Staff_services.dashboard2()
-    return data, HTTP_200_OK
+    # takes staff to dashboard to upon sucessful login and getting an access token
+    try:
+       
+        data=Staff_services.dashboard2()
+        return data, HTTP_200_OK
+    
+    except Exception as e:
+        return str(e),HTTP_500_INTERNAL_SERVER_ERROR
 
 @staff.route('/staff_login',methods=['GET'])
 def staff_login():
-    data=Staff_services.staff_login()
-    return data, HTTP_200_OK
+    # takes the user to the login page
+    try:
+        data=Staff_services.staff_login()
+        return data, HTTP_200_OK
+    
+    except Exception as e:
+        return str(e),HTTP_500_INTERNAL_SERVER_ERROR
+    
 
 @staff.post('/taken/refresh')
 @jwt_required(refresh=True)
 def refresh():
-    identity = get_jwt_identity()
-    access_token = create_access_token(identity=identity)
-    return jsonify(access_token=access_token), HTTP_200_OK
+    #gets user's identity and refreshes the token to keep the user logged in
+    try:
+        identity = get_jwt_identity()
+        access_token = create_access_token(identity=identity)
+        return jsonify(access_token=access_token), HTTP_200_OK
     
+    except Exception as e:
+        return str(e),HTTP_500_INTERNAL_SERVER_ERROR

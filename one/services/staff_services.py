@@ -3,8 +3,10 @@ from my_module import *
 from werkzeug.security import generate_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity,create_refresh_token
 import validators
-from queries.newUser import *
 from constants.vars import *
+from controllers.staff_controller import *
+
+#module to control all staff actions
 class Staff_services:
     def register_staff():
             
@@ -45,7 +47,7 @@ class Staff_services:
         
         if validators.email(user_email):
             if user and password:
-                    user=UserQuery.get_staff(user_email)
+                    user=Staff.get_staff(user_email)
                     if not user:
                         return jsonify({"error": "user does not exist"}), 401
                     user_data={
@@ -59,7 +61,7 @@ class Staff_services:
                     session['logged_in'] = True  # Set logged in session
                     session['user_email'] = user_email
 
-                    if user["email"]== staff_1:
+                    if user["email"]== STAFF_1:
                         return jsonify({
                         "message": "Login successful",
                         "redirectUrl": url_for('staff.dashboard1'),
@@ -67,8 +69,8 @@ class Staff_services:
                         "refresh_token": refresh_token,
                         "user_data": user_data
                     }), 200
-
-                    elif user["email"]== staff_2:
+                    
+                    elif user["email"]== STAFF_2:
                         return jsonify({
                             "message": "Login successful",
                             "redirectUrl": url_for('staff.dashboard2'),
@@ -86,10 +88,13 @@ class Staff_services:
                 return jsonify({
                         "message": "Login unsuccessful,wrong password"
                     })
+            
+        else:
+            return jsonify({"error": "Invalid email"}), 401
     def query_for_staff_1():
          
             try:
-                data=UserQuery.queryforstaff1()
+                data=Staff.queryforstaff1()
                 print (data)
                 if data is None:
                     return jsonify({"no data returned from query"})
@@ -100,9 +105,8 @@ class Staff_services:
                 return jsonify({"error":"An error occurred while fetching user data"})
 
     def query_for_staff_2():
-       
         try:
-            data=UserQuery.queryforstaff2()
+            data=Staff.queryforstaff2()
             print({"message":data})
             if data is None:
                 return jsonify({"error": "No data returned from query"})

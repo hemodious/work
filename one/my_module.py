@@ -5,6 +5,7 @@ from email.mime.text import  MIMEText
 from flask import jsonify
 from werkzeug.security import generate_password_hash,check_password_hash
 from constants.vars import *
+import validators
 
 def db_connection():
     conn =None
@@ -114,8 +115,10 @@ def successmail(complaint_id):
         conn.close()  
 def verifyEmail(email):
     try:
+
         conn = staff_connection()  # Open the database connection
         cursor = conn.cursor()
+        validators.email(email)
         email_query="SELECT email FROM staff WHERE email = ?"
         cursor.execute(email_query, (email,))
         fin = cursor.fetchone()[0]

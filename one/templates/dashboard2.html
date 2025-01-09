@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Staff Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <link rel="icon" href="{{ url_for('static', filename='images/moorle_logo.png') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet"  href="{{ url_for('static', filename='dashboard2 .css') }}">
@@ -107,15 +110,15 @@
                 <div id="table-container">
                     <table id="data-table">
                         <thead >
-                        <tr>
-                            <th>No.</th>
-                            <th>Full Name</th>
-                            <th>Email</th>
-                            <th>Telepone number</th>
-                            <th>category</th>
-                            <th>status</th>
-                            <th>Action</th>
-                        </tr>
+                            <tr>
+                                <th>No.</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Telepone number</th>
+                                <th>category</th>
+                                <th>status</th>
+                                <th>Action</th>
+                            </tr>
                         </thead>
                         <tbody id="table-body">
                             <td></td>
@@ -125,13 +128,18 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                        <hr>
-                        </tbody>
+                        </tbody> 
                     </table>
-                </div>
-                <div id="details-container" style="display: none;">
-                    <div id="details-content"></div>
-                </div>
+            
+                    <div class="pagination">
+                        <button class="prev-button"><i class="fa-solid fa-arrow-left"></i> Previous</button>
+                        <button class="next-button">Next <i class="fa-solid fa-arrow-right"></i></button>
+                        <span id="page-info">Page 1 of 10</span>
+                    </div>
+                    <div id="details-container" style="display: none;">
+                        <div id="details-content"></div>
+                    </div>
+                </div> 
             </section>
             
            

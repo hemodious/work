@@ -6,7 +6,7 @@
 
 }
 *{
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Nunito';
     margin: 0;
     padding: 0;
     text-decoration: none;
@@ -19,7 +19,7 @@ body{
     display: flex;
     justify-content: left;
     margin: 20px 20px;
-    background:url(images/background2.jpeg)center/cover;
+    background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
 }
 .sidebar{
     height: 100%;
@@ -28,7 +28,7 @@ body{
     left: 0;
     top: 0;
     z-index: 100;
-    background: var(--main-color);
+    background: #063970;
     color: #fff;
     overflow-y: auto;
 
@@ -142,21 +142,22 @@ table, th, td{
     padding: 20px;
     border-collapse: collapse; /* This removes space between table cells */
 }
+
 main {
     width: 82vw;
     height: 90vh;
-    background: #fff5;
-    backdrop-filter: blur(7px);
-    box-shadow: 0.4rem .8rem #0005;
-    border-radius: 0.2rem;
+    background: none;
     overflow: hidden;
 }
 
 .table_header{
     width: 100%;
     height: 10%;
-    background-color: #fff4;
+    background: none;
     padding: .8rem 1rem;
+    display: flex;
+    align-items: center;
+
 }
 .table_body{
     width: 95%;
@@ -183,7 +184,7 @@ main {
 }
 input[type='text']{
     padding: 10px;
-    border: 2px solid #027581;
+    border: 2px solid #063970;
     border-radius: 5px;
     width: 80%;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -193,7 +194,7 @@ input[type='text']{
 
 select{
     padding: 10px;
-    border: 2px solid #027581;
+    border: 2px solid #063970;
     border-radius: 5px;
     cursor: pointer;
 }
@@ -364,3 +365,34 @@ select{
     color: #fff;
   }
   
+
+  .pagination{
+    width: 100%;
+    height: 40px;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    border: none;
+  }
+  .prev-button{
+    padding: 5px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    background: none;
+    font-size: 15px;
+  }
+  .next-button{
+    padding: 5px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    background: none;
+    font-size: 15px;
+  }
+  .next-button:hover  , .prev-button:hover{
+    text-decoration: underline;
+  }

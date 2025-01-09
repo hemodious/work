@@ -35,6 +35,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
                 .then(data => {
                     console.log('Server response:', data.redirectUrl);
                    
+
                     // Check if redirectUrl is present in the response
                     window.location.href = data.redirectUrl;
                   

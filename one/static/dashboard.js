@@ -1,3 +1,7 @@
+
+
+    
+
 // Function to fetch data from the API and populate the table
 async function populateTable() {
 

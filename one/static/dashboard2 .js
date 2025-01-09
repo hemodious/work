@@ -1,90 +1,97 @@
-// Function to fetch data from the API and populate the table
 async function populateTable() {
-  const apiUrl = '/staff2';  // Replace with your actual API URL
+    const apiUrl = '/staff2';  // Update with the correct API URL for fetching users
+    
 
-  try {
-      // Fetch the data from the API
-      const response = await fetch(apiUrl, { mode: 'cors' });
-      if (!response.ok) {
-          throw new Error('Failed to fetch data');
-      }
-      
-      // Parse the JSON data
-      const data = await response.json();
+    try {
+        // Fetch the data from the API
+        const response = await fetch(apiUrl, { mode: 'cors' });
+        if (!response.ok) {
+            throw new Error('Failed to fetch data');
+        }
 
-      // Get the table body and other sections
-      const tableBody = document.querySelector('#data-table tbody');
-      const tableContainer = document.querySelector('#table-container');
-      const detailsContainer = document.querySelector('#details-container');
+        // Parse the JSON data
+        const jsonResponse = await response.json();
+        const pagination = jsonResponse.pagination;
+        const users = jsonResponse.users;
+        console.log('API Response:', jsonResponse); // Log the full response to inspect its structure
+        console.log(jsonResponse.pagination)
+        console.log(jsonResponse.users)
+        // Assuming the 'users' data is in jsonResponse.data.users (adjust based on your actual response structure)
+        
 
-      // Clear any existing rows
-      tableBody.innerHTML = '';
+        if (!Array.isArray(users)) {
+            throw new Error('Data is not an array or is missing');
+        }
 
-      // Iterate over the data and create table rows
-      data.forEach(item => {
-          const row = document.createElement('tr');
-          
-          // Create table cells
-          const idCell = document.createElement('td');
-          idCell.textContent = item.id;
+        // Get the table body and other sections
+        const tableBody = document.querySelector('#data-table tbody');
+        const tableContainer = document.querySelector('#table-container');
 
-          const nameCell = document.createElement('td');
-          nameCell.textContent = item.name;
+        // Iterate over the data and create table rows
+        users.forEach(item => {
+            const row = document.createElement('tr');
+            
+            // Create table cells
+            const idCell = document.createElement('td');
+            idCell.textContent = item.id;
 
-          const emailCell = document.createElement('td');
-          emailCell.textContent = item.email;
+            const nameCell = document.createElement('td');
+            nameCell.textContent = item.name;
 
-          const phoneCell = document.createElement('td');
-          phoneCell.textContent = item.telephone;
+            const emailCell = document.createElement('td');
+            emailCell.textContent = item.email;
 
-          const categoryCell = document.createElement('td');
-          categoryCell.textContent = item.category;
+            const phoneCell = document.createElement('td');
+            phoneCell.textContent = item.telephone;
 
-          // Status column
-          const statusCell = document.createElement('td');
-          const statusDiv = document.createElement('div');
-          statusDiv.textContent = item.status; // Default to 'Unresolved'
-          statusCell.value = item.status;
-          //Status cell colours
-          if(item.status=='resolved'){
-            statusDiv.classList.add('resolved');
-          }
-          else{
-            statusDiv.classList.add('status-cell');
-          }
-          statusCell.appendChild(statusDiv);
+            const categoryCell = document.createElement('td');
+            categoryCell.textContent = item.category;
 
-          // View More button
-          const actionCell = document.createElement('td');
-          const viewButton = document.createElement('button');
-          viewButton.textContent = 'View More';
-          viewButton.classList.add('view-more-btn');
-          viewButton.addEventListener('click', () => {
-              showDetails(item, statusDiv);
-          });
-          actionCell.appendChild(viewButton);
+            // Status column
+            const statusCell = document.createElement('td');
+            const statusDiv = document.createElement('div');
+            statusDiv.textContent = item.status; // Default to 'Unresolved'
+            statusCell.value = item.status;
+            // Status cell colours
+            if (item.status == 'resolved') {
+                statusDiv.classList.add('resolved');
+            } else {
+                statusDiv.classList.add('status-cell');
+            }
+            statusCell.appendChild(statusDiv);
 
-          // Append cells to the row
-          row.appendChild(idCell);
-          row.appendChild(nameCell);
-          row.appendChild(emailCell);
-          row.appendChild(phoneCell);
-          row.appendChild(categoryCell);
-          row.appendChild(statusCell);
-          row.appendChild(actionCell);
+            // View More button
+            const actionCell = document.createElement('td');
+            const viewButton = document.createElement('button');
+            viewButton.textContent = 'View More';
+            viewButton.classList.add('view-more-btn');
+            viewButton.addEventListener('click', () => {
+                showDetails(item, statusDiv);
+            });
+            actionCell.appendChild(viewButton);
 
-          // Append the row to the table body
-          tableBody.appendChild(row);
-      });
+            // Append cells to the row
+            row.appendChild(idCell);
+            row.appendChild(nameCell);
+            row.appendChild(emailCell);
+            row.appendChild(phoneCell);
+            row.appendChild(categoryCell);
+            row.appendChild(statusCell);
+            row.appendChild(actionCell);
 
-      // Show the table container
-      tableContainer.style.display = 'block';
-      detailsContainer.style.display = 'none';
+            // Append the row to the table body
+            tableBody.appendChild(row);
+        });
 
-  } catch (error) {
-      console.error('Error populating the table:', error);
-  }
+        // Show the table container
+        tableContainer.style.display = 'block';
+        detailsContainer.style.display = 'none';
+
+    } catch (error) {
+        console.error('Error populating the table:', error);
+    }
 }
+
 
 // Function to show detailed information about a complaint
 function showDetails(item, statusDiv) {

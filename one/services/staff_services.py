@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity,create_refresh_token
 import validators
 from constants.vars import *
+from constants.HTTP_STATUS_CODES import *
 from controllers.staff_controller import *
 
 #module to control all staff actions
@@ -90,7 +91,7 @@ class Staff_services:
                     })
             
         else:
-            return jsonify({"error": "Invalid email"}), 401
+            return jsonify({"error": "Invalid email"}), HTTP_401_UNAUTHORIZED
     def query_for_staff_1():
          
             try:
@@ -123,6 +124,7 @@ class Staff_services:
         if not session.get('logged_in'):
             return redirect(url_for('staff.staff_login'))  # Redirect to login if not logged in
         return render_template('dashboard1.html')
+    
     def staff_login() :
         return render_template('login.html')
     

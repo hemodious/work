@@ -3,4 +3,7 @@
 #inform staff that he is not a staff per our data if email is not in the database
 #if staff is in the database return the staff data
 #compare the entered passwaord with the password in the database 
-
+#check database for staff email 
+# if email is in staff table return all complaints  from user table 
+"""sup
+"""

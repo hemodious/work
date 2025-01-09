@@ -10,13 +10,13 @@ class Staff():
         conn=db_connection()
         cursor=conn.cursor()
 
-        cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?) LIMIT ? OFFSET ?',(*ISSUES,per_page,offset))
+        cursor.execute('SELECT * FROM user WHERE category IN  (?,?,?) LIMIT ? OFFSET ?',(*ISSUES2,per_page,offset))
         users=[
                 dict(id=row[0],name=row[1],telephone=row[2],complaint=row[3],email=row[4],category=row[5],image=f"/download/{row[0]}",complaint_id=row[9], date=row[11],status=row[10] )
                 for row in cursor.fetchall()
             ]
         
-        cursor.execute('SELECT COUNT(*) FROM user WHERE category IN (?,?,?)',ISSUES)
+        cursor.execute('SELECT COUNT(*) FROM user WHERE category IN (?,?,?)',ISSUES1)
         total = cursor.fetchone()[0]
         conn.close()
         total_pages=(total // per_page) + (1 if total % per_page > 0 else 0)

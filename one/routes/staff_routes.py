@@ -59,7 +59,7 @@ def dashboard1():
   try:
 
     data=Staff_services.dashboard1()
-    return jsonify(data) , HTTP_200_OK
+    return data , HTTP_200_OK
   
   except Exception as e:
       return str(e),HTTP_500_INTERNAL_SERVER_ERROR

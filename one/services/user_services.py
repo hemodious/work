@@ -66,7 +66,7 @@ class User_services:
         conn.close()   # Close the connection
     # 
     #sends a mail to the customer if the status 
-        if new_status ==valid:
+        if new_status ==VALID:
             successmail(complaint_id)
         return jsonify({"message": "Status updated successfully", "updated_at": current_time.isoformat()}), 200
 

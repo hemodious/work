@@ -4,12 +4,13 @@ from constants.HTTP_STATUS_CODES import *
 from constants.vars import *
 
 # blueprint to organise my routes or endpoints
-user = Blueprint('api', __name__)
+user = Blueprint('user', __name__)
 
 @user.route('/download/<int:image_id>')
 # function to convert into downloadable format
-def download_image():
-    User_services.download()
+def download_image(image_id):
+    data=User_services.download(image_id)
+    return data
 
 
 @user.route('/user',methods=['POST','GET'])#route to  get all user data/ create  new user

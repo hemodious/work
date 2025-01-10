@@ -132,14 +132,14 @@
                     </table>
             
                     <div class="pagination">
-                        <button class="prev-button"><i class="fa-solid fa-arrow-left"></i> Previous</button>
-                        <button class="next-button">Next <i class="fa-solid fa-arrow-right"></i></button>
-                        <span id="page-info">Page 1 of 10</span>
-                    </div>
-                    <div id="details-container" style="display: none;">
-                        <div id="details-content"></div>
+                        <button class="prev-button" id="prev-button"><i class="fa-solid fa-arrow-left"></i> Previous</button>
+                        <button class="next-button" id="next-button">Next <i class="fa-solid fa-arrow-right"></i></button>
+                        <span>Page <span id="current-page"></span> of <span id="total-pages"></span></span>
                     </div>
                 </div> 
+                <div id="details-container" style="display: none;">
+                    <div id="details-content"></div>
+                </div>
             </section>
             
            

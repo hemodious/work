@@ -3,6 +3,9 @@
 <head>
     <link rel="icon" href="{{ url_for('static', filename='images/moorle_logo.png') }}">
     <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
     <title>Staff Portal</title>
@@ -129,6 +132,11 @@
                         <hr>
                         </tbody>
                     </table>
+                    <div class="pagination">
+                        <button class="prev-button" id="prev-button"><i class="fa-solid fa-arrow-left"></i> Previous</button>
+                        <button class="next-button" id="next-button">Next <i class="fa-solid fa-arrow-right"></i></button>
+                        <span>Page <span id="current-page"></span> of <span id="total-pages"></span></span>
+                    </div>
                 </div>
                 <div id="details-container" style="display: none;">
                     <div id="details-content"></div>

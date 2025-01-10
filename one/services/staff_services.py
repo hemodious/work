@@ -96,7 +96,6 @@ class Staff_services:
          
             try:
                 data=Staff.queryforstaff1()
-                print (data)
                 if data is None:
                     return jsonify({"no data returned from query"})
                 else:
@@ -108,7 +107,6 @@ class Staff_services:
     def query_for_staff_2():
         try:
             data=Staff.queryforstaff2()
-            print({"message":data})
             if data is None:
                 return jsonify({"error": "No data returned from query"})
             return jsonify(data)

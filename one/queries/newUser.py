@@ -28,7 +28,7 @@ class UserQuery:
             sql="""INSERT INTO user (name,telephone,complaint,email,category,image,complaint_id,status)
             VALUES (?,?,?,?,?,?,?,?)"""
         # executing the query
-            cursor=cursor.execute(sql,(new_name,new_telephone,new_complaint,new_email,new_category,image_data,new_complaint_id,update_status))
+            cursor=conn.execute(sql,(new_name,new_telephone,new_complaint,new_email,new_category,image_data,new_complaint_id,update_status))
             conn.commit()   
             conn.close()
 

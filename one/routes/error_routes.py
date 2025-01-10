@@ -12,5 +12,5 @@ def internal_server_error(e):
 
 
 error.app_errorhandler(HTTP_404_PAGE_NOT_FOUND)
-def internal_server_error(e):
+def page_not_found(e):
     return jsonify({"Error_message":"the page you are looking for does not exist"}),HTTP_404_PAGE_NOT_FOUND

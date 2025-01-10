@@ -1,7 +1,4 @@
-//Function to populate table
-async function populateTable() {
-    const apiUrl = `/staff1`;  // Update with the correct API URL for fetching users
-
+async function populateTable(apiUrl = '/staff1') {
     try {
         // Fetch the data from the API
         const response = await fetch(apiUrl, { mode: 'cors' });
@@ -9,66 +6,27 @@ async function populateTable() {
             throw new Error('Failed to fetch data');
         }
 
-        // Parse the JSON data
+        // Parse the JSON response
         const jsonResponse = await response.json();
-        const pagination = jsonResponse.pagination;
-        const users = jsonResponse.users;
-        console.log('API Response:', jsonResponse); // Log the full response to inspect its structure
-        console.log(jsonResponse.pagination)
-        console.log(jsonResponse.users)
-        // Assuming the 'users' data is in jsonResponse.data.users (adjust based on your actual response structure)
-        console.log(pagination.next_page)
-        
+        const { pagination, users } = jsonResponse;
 
-        // Page navigation
-            function updatePaginationUI() {
-            const prevButton = document.getElementById('prev-button');
-            const nextButton = document.getElementById('next-button');
-            const currentPage = document.getElementById('current-page');
-            const totalPages = document.getElementById('total-pages');
-            
-            // Update page number display
-            currentPage.textContent = pagination.page;
-            totalPages.textContent = pagination.pages;
+        console.log('API Response:', jsonResponse);  // Debugging logs
+        console.log('Pagination:', pagination);
+        console.log('Users:', users);
 
-            //Next and previous buttons
-            // Enable/disable buttons based on the availability of prev_page and next_page
-            prevButton.disabled = !pagination.prev_page;
-            nextButton.disabled = !pagination.next_page;
-
-             // Update the button click handlers with new URLs
-                if (pagination.prev_page) {
-                prevButton.onclick = () => populateTable(pagination.prev_page);
-                }
-                if (pagination.next_page) {
-                nextButton.onclick = () => populateTable(pagination.next_page);
-
-                }
-}
-
-// Attach event listeners to the Previous and Next buttons
-document.getElementById('prev-button').addEventListener('click', () => {
-    populateTable(currentApiUrl); // Fetch the previous page (initially disabled)
-});
-document.getElementById('next-button').addEventListener('click', () => {
-    populateTable(currentApiUrl); // Fetch the next page (initially disabled)
-});
-        
-        updatePaginationUI();
-         
-
-        if (!Array.isArray(users)) {
-            throw new Error('Data is not an array or is missing');
+        // Ensure pagination and user data are present
+        if (!pagination || !Array.isArray(users)) {
+            throw new Error('Invalid API response structure');
         }
-       
-        // Get the table body and other sections
-        const tableBody = document.querySelector('#data-table tbody');
-        const tableContainer = document.querySelector('#table-container');
 
-        // Iterate over the data and create table rows
+        // Clear existing table data to avoid duplication
+        const tableBody = document.querySelector('#data-table tbody');
+        tableBody.innerHTML = '';
+
+        // Populate table with new data
         users.forEach(item => {
             const row = document.createElement('tr');
-            
+
             // Create table cells
             const idCell = document.createElement('td');
             idCell.textContent = item.id;
@@ -85,30 +43,24 @@ document.getElementById('next-button').addEventListener('click', () => {
             const categoryCell = document.createElement('td');
             categoryCell.textContent = item.category;
 
-            // Status column
+            // Status column with color coding
             const statusCell = document.createElement('td');
             const statusDiv = document.createElement('div');
-            statusDiv.textContent = item.status; // Default to 'Unresolved'
-            statusCell.value = item.status;
-            // Status cell colours
-            if (item.status == 'resolved') {
-                statusDiv.classList.add('resolved');
-            } else {
-                statusDiv.classList.add('status-cell');
-            }
+            statusDiv.textContent = item.status || 'Unresolved';
+            statusDiv.classList.add(item.status === 'resolved' ? 'resolved' : 'status-cell');
             statusCell.appendChild(statusDiv);
 
-            // View More button
+            // Action button
             const actionCell = document.createElement('td');
             const viewButton = document.createElement('button');
             viewButton.textContent = 'View More';
             viewButton.classList.add('view-more-btn');
             actionCell.appendChild(viewButton);
-            //Listen for click on view more button
-            viewButton.addEventListener('click', () => {
-            showDetails(item, statusDiv);
-            });
 
+            // Attach click event to View More button
+            viewButton.addEventListener('click', () => {
+                showDetails(item, statusDiv);
+            });
 
             // Append cells to the row
             row.appendChild(idCell);
@@ -119,16 +71,35 @@ document.getElementById('next-button').addEventListener('click', () => {
             row.appendChild(statusCell);
             row.appendChild(actionCell);
 
-            // Append the row to the table body
+            // Append row to table body
             tableBody.appendChild(row);
-
-           
         });
-        
+
+        // Update pagination UI
+        updatePaginationUI(pagination);
 
     } catch (error) {
         console.error('Error populating the table:', error);
     }
+}
+
+function updatePaginationUI(pagination) {
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+    const currentPage = document.getElementById('current-page');
+    const totalPages = document.getElementById('total-pages');
+
+    // Update page display
+    currentPage.textContent = pagination.page || 1;
+    totalPages.textContent = pagination.pages || 1;
+
+    // Enable/disable buttons
+    prevButton.disabled = !pagination.prev_page;
+    nextButton.disabled = !pagination.next_page;
+
+    // Update button click handlers
+    prevButton.onclick = () => pagination.prev_page && populateTable(pagination.prev_page);
+    nextButton.onclick = () => pagination.next_page && populateTable(pagination.next_page);
 }
 
 
